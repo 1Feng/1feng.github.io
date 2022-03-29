@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on 1Feng&#39;s Blog</title>
+    <link>http://1feng.github.io/categories/linux/</link>
+    <description>Recent content in linux on 1Feng&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 05 May 2016 00:00:00 +0000</lastBuildDate><atom:link href="http://1feng.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux cpu load</title>
+      <link>http://1feng.github.io/post/2016-05-05-linux-cpu-load/</link>
+      <pubDate>Thu, 05 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/post/2016-05-05-linux-cpu-load/</guid>
+      <description>简析 工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无</description>
+    </item>
+    
+    <item>
+      <title>如何实现一个 daemon</title>
+      <link>http://1feng.github.io/post/2014-11-29-daemon-ho-to/</link>
+      <pubDate>Sat, 29 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/post/2014-11-29-daemon-ho-to/</guid>
+      <description>Linux下经常需要将服务程序实现为daemon（守护进程）。从而完成后台运行，开机启动，关机正常结束的功能。 需求 后台运行 ：摆脱tty控制 根</description>
+    </item>
+    
+  </channel>
+</rss>

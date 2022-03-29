@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Linux cpu load - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="简析 工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2016-05-05-linux-cpu-load/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Linux cpu load" />
+<meta property="og:description" content="简析 工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2016-05-05-linux-cpu-load/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-05-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-05-05T00:00:00+00:00" />
+
+<meta itemprop="name" content="Linux cpu load">
+<meta itemprop="description" content="简析 工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无"><meta itemprop="datePublished" content="2016-05-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2016-05-05T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3326">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Linux cpu load"/>
+<meta name="twitter:description" content="简析 工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Linux cpu load</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-05-05 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> linux </a>
+            <a href="/categories/system/"> system </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#简析">简析</a></li>
+        <li><a href="#原理">原理</a></li>
+        <li><a href="#总结">总结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="简析">简析</h2>
+<p>工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无法描述清楚这个值所反馈的真实含义，抽时间读了网上的一些文章，简单做下笔记：</p>
+<ul>
+<li><strong>introduction</strong> ：例如 load average: 0.03, 0.05, 0.06 后面三个数字代表了过去1分钟，5分钟，15分钟的CPU平均负载；</li>
+<li><strong>Threshold</strong> ：如果当前机器是一个N核CPU（grep &lsquo;model name&rsquo; /proc/cpuinfo | wc -l），则load average的上限就是N，具体如下：
+<ul>
+<li>预警：0.7*N</li>
+<li>上限：1.0*N</li>
+<li>WTF：5.0*N</li>
+</ul>
+</li>
+<li><strong>tips</strong> ：
+<ul>
+<li>1分钟，5分钟，15分钟三个参考数据，着重参考后两者即可，1分钟内如果超过1.0*N，并无大碍</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>以上来自互联网前辈们工程实践的总结</p>
+</blockquote>
+<h2 id="原理">原理</h2>
+<p>尝试看下kernel里是怎么计算load值的：</p>
+<p><strong>定时计算</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// linux-2.6.32.68/kernel/timer.c
+</span></span></span><span class="line"><span class="cl"><span class="c1">// jiffies记录了电脑开机到现在总共的时钟中断次数
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 如果系统的时钟频率是1000（由宏HZ设置），即1秒中断1000次，每1ms中断一次
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 我们暂时不管ticks到底是代表了几次中断，总之每个ticks周期，都会调用load的计算函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">do_timer</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">ticks</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jiffies_64</span> <span class="o">+=</span> <span class="n">ticks</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">update_wall_time</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">calc_global_load</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// linux-2.6.32.68/kernel/sched.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * These are the constant used to fake the fixed-point load-average
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * counting. Some notes:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *  - 11 bit fractions expand to 22 bits by the multiplies: this gives
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *    a load-average precision of 10 bits integer + 11 bits fractional
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *  - if you want to count load-averages more often, you need more
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *    precision, or rounding will get you. With 2-second counting freq,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *    the EXP_n values would be 1981, 2034 and 2043 if still using only
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *    11 bit fractions.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 上述大意，是采用了10 bit整数 + 11 bits的分数的fixed-point形式来表示，并非通常的float-point
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define FSHIFT      11      </span><span class="cm">/* nr of bits of precision */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define FIXED_1     (1&lt;&lt;FSHIFT) </span><span class="cm">/* 1.0 as fixed-point */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define LOAD_FREQ   (5*HZ+1)    </span><span class="cm">/* 5 sec intervals */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define EXP_1       1884        </span><span class="cm">/* 1/exp(5sec/1min) as fixed-point */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define EXP_5       2014        </span><span class="cm">/* 1/exp(5sec/5min) */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define EXP_15      2037        </span><span class="cm">/* 1/exp(5sec/15min) */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// linux-2.6.32.68/kernel/sched.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">calc_global_load</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">upd</span> <span class="o">=</span> <span class="n">calc_load_update</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">active</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果 jiffies 小于 upd，直接return
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 当前距离上次计算超过5 second + 10个ticks（如果HZ == 1000，即10ms）则触发计算
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">time_before</span><span class="p">(</span><span class="n">jiffies</span><span class="p">,</span> <span class="n">upd</span><span class="p">))</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">active</span> <span class="o">=</span> <span class="n">atomic_long_read</span><span class="p">(</span><span class="o">&amp;</span><span class="n">calc_load_tasks</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">active</span> <span class="o">=</span> <span class="n">active</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">active</span> <span class="o">*</span> <span class="nl">FIXED_1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 直观上看，这三次计算分别对应的应该是1分钟，5分钟，15分钟三个load值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">avenrun</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_load</span><span class="p">(</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">EXP_1</span><span class="p">,</span> <span class="n">active</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">avenrun</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_load</span><span class="p">(</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">EXP_5</span><span class="p">,</span> <span class="n">active</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">avenrun</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_load</span><span class="p">(</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">EXP_15</span><span class="p">,</span> <span class="n">active</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 计算完成后更新 cal_load_update
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// LOAD_FREQ = 5HZ + 1  即约等于 5 seconds
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 其实cal_load_update指定了下次计算的时间点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">calc_load_update</span> <span class="o">+=</span> <span class="n">LOAD_FREQ</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">long</span>
+</span></span><span class="line"><span class="cl"><span class="nf">calc_load</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">load</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">exp</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">active</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">load</span> <span class="o">*=</span> <span class="n">exp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">load</span> <span class="o">+=</span> <span class="n">active</span> <span class="o">*</span> <span class="p">(</span><span class="n">FIXED_1</span> <span class="o">-</span> <span class="n">exp</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">load</span> <span class="o">&gt;&gt;</span> <span class="n">FSHIFT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>截至目前，我只知道了计算间隔约5秒钟
+没看懂EXP_1，EXP_5, EXP_15，FSHIFT这几个magic number，冥冥中感觉前三个应该跟1分钟，5分钟，15分钟有关
+active代表的又是什么？感觉像是指的active状态的task数量（最近刚读完<a href="http://pages.cs.wisc.edu/~remzi/OSTEP/#book-chapters">《Operating Systems: Three Easy Pieces》</a>）</p>
+<p>追溯下 calc_load_task变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// linux-2.6.32.68/kernel/sched.c
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 发现针对calc_load_task的删除操作
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * remove the tasks which were accounted by rq from calc_load_tasks.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">calc_global_load_remove</span><span class="p">(</span><span class="k">struct</span> <span class="nc">rq</span> <span class="o">*</span><span class="n">rq</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">atomic_long_sub</span><span class="p">(</span><span class="n">rq</span><span class="o">-&gt;</span><span class="n">calc_load_active</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">calc_load_tasks</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rq</span><span class="o">-&gt;</span><span class="n">calc_load_active</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 发现针对calc_load_task的添加操作
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/*      
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Either called from update_cpu_load() or from a cpu going idle
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 更新calc_load_tasks动作，是在load的计算之后进行的
+</span></span></span><span class="line"><span class="cl"><span class="c1">// do_timer()被调用之后又调用的update_process_times() -&gt; calc_load_account_active() -&gt; update_cpu_load() -&gt; calc_load_account_active（）
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 但是calc_load_account_active（）也是每隔LOAD_FREQ执行一次，avg_load计算的是前一个LOAD_FREQ周期的数据，计算完了，然后calc_load_task再被更新   
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">void</span> <span class="nf">calc_load_account_active</span><span class="p">(</span><span class="k">struct</span> <span class="nc">rq</span> <span class="o">*</span><span class="n">this_rq</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">nr_active</span><span class="p">,</span> <span class="n">delta</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 结合rq定义看，所谓 active 就是R，D类型的进程数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">nr_active</span> <span class="o">=</span> <span class="n">this_rq</span><span class="o">-&gt;</span><span class="n">nr_running</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nr_active</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span> <span class="n">this_rq</span><span class="o">-&gt;</span><span class="n">nr_uninterruptible</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果一个LOAD_FREQ周期内，nr_active数量有发生变化，则计算delta
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">nr_active</span> <span class="o">!=</span> <span class="n">this_rq</span><span class="o">-&gt;</span><span class="n">calc_load_active</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// delta 是指当前一个LOAD_FREQ周期新增的R,D进程数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">delta</span> <span class="o">=</span> <span class="n">nr_active</span> <span class="o">-</span> <span class="n">this_rq</span><span class="o">-&gt;</span><span class="n">calc_load_active</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">this_rq</span><span class="o">-&gt;</span><span class="n">calc_load_active</span> <span class="o">=</span> <span class="n">nr_active</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 疑问：既然每次都加delta，calc_load_tasks 其实就等于nr_active嘛，直接atomic_long_set不就完了？？
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">atomic_long_add</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">calc_load_tasks</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 查看 rq的定义: per-CPU runqueue data structure
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * This is the main, per-CPU runqueue data structure.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Locking rule: those places that want to lock multiple runqueues
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * (such as the load balancing or the thread migration code), lock
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * acquire operations must be ordered by ascending &amp;runqueue.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">rq</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * nr_running and cpu_load should be in the same cacheline because
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * remote CPUs use both these fields when doing load calculation.
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 可运行的进程数量（进程状态以及含义可以自行google）-----状态码 R (TASK_RUNNING)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">nr_running</span><span class="p">;</span>    <span class="c1">// kernel里的number类型都以nr作为前缀
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * This is part of a global counter where only the total sum
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * over all CPUs matters. A task can increase this counter on
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * one CPU and if it got migrated afterwards it may decrease
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * it on another CPU. Always updated under the runqueue lock:
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 不可中断睡眠状态进程数-----状态码 D (TASK_UNINTERRUPTIBLE)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">nr_uninterruptible</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* calc_load related fields */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">calc_load_update</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="n">calc_load_active</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再尝试看下avenrun数组内的数据都在哪里被使用了，最终是怎么输出到/proc/loadavg（uptime，top里的load数据都源于此文件）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// linux-2.6.32.68/kernel/sched.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * get_avenrun - get the load average array
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @loads:  pointer to dest load array
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @offset: offset to add
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @shift:  shift count to shift the result left
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * These values are estimates at best, so no need for locking.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">get_avenrun</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="n">loads</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">offset</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shift</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">loads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">shift</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">loads</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">shift</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">loads</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">shift</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// linux-2.6.32.68/fs/proc/loadavg.c
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 从这两个宏可以看出，avnrun内元素，低11位为分数,高位是10进制的整数
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 其实之前FSHIFT处的注释就说过了&#39;fixed-point&#39; &amp;&amp; &#39;10 bits integer + 11 bits fractional&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define LOAD_INT(x) ((x) &gt;&gt; FSHIFT)
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define LOAD_FRAC(x) LOAD_INT(((x) &amp; (FIXED_1-1)) * 100)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">loadavg_proc_show</span><span class="p">(</span><span class="k">struct</span> <span class="nc">seq_file</span> <span class="o">*</span><span class="n">m</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">v</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">avnrun</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="n">get_avenrun</span><span class="p">(</span><span class="n">avnrun</span><span class="p">,</span> <span class="n">FIXED_1</span><span class="o">/</span><span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="c1">// 看输出格式，应该就是/proc/loadavg内的数据无疑
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">seq_printf</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&#34;%lu.%02lu %lu.%02lu %lu.%02lu %ld/%d %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LOAD_INT</span><span class="p">(</span><span class="n">avnrun</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">LOAD_FRAC</span><span class="p">(</span><span class="n">avnrun</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LOAD_INT</span><span class="p">(</span><span class="n">avnrun</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">LOAD_FRAC</span><span class="p">(</span><span class="n">avnrun</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">LOAD_INT</span><span class="p">(</span><span class="n">avnrun</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">LOAD_FRAC</span><span class="p">(</span><span class="n">avnrun</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nr_running</span><span class="p">(),</span> <span class="n">nr_threads</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">task_active_pid_ns</span><span class="p">(</span><span class="n">current</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">last_pid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>以上，我们知道了load计算其实只是利用了cpu 当前的R，D状态的进程数，仍旧未解的问题：</p>
+<blockquote>
+<ol>
+<li>calc_load_tasks 存放的竟然是当前的R,D状态的进程数，更新周期为LOAD_FREQ，那究竟是如何计算出过去1,5,15分钟的平均load的，load的计算具体公式是什么？</li>
+<li>具体的那几个magic number到底什么含义？</li>
+</ol>
+</blockquote>
+<p>通过kernel代码里calc_load()的实现，可以看到在计算当前load的时候，变量只有active，公式 ：
+load(N) = (load(N-1)<em>EXP + active</em>(2^11 - EXP) )/ 2^11</p>
+<p>很明显这不是朴素的平均数计算方法，奈何统计学学的实在不咋滴，思考良久依旧不知所以。</p>
+<p>回想下朴素的计算方式，考虑目前我们可以做到5秒统计一次当前的active tasks数量，那么如果是我自己来实现，统计过去1分钟的平均值，我会进行如下设计：
+<img src="/images/blog_images/cpu_load.png" alt=""></p>
+<p>用长度12（60 s / 5s = 12）的链表来存储，每个周期（5s）,会在首部添加一个节点，记录当前的active tasks数量，并删除尾端的节点；整个链表则可以随时用来计算过去的1分钟，active tasks的平均数量，即avg_load = count(list_node)/12
+但是，每次更新都有一次插入，一次删除，而且需要进行加锁操作，在kernel里这样实现应该不是一个好的方案，另外还需要了解的一点就是处于性能的考虑kernel里不支持浮点数操作</p>
+<p>最后不断google，发现了<a href="http://www.teamquest.com/files/9214/2049/9761/ldavg1.pdf">《UNIX Load Average Part 1》</a> , 同样是解析load，写的比我详细，并且对magic number做了详细解释，文中指出此处计算的是 <em><strong>exponentially-damped moving averages</strong></em>，这也只是<a href="https://en.wikipedia.org/wiki/Moving_average">moving averages</a>的一种计算方式（冥冥之中感觉这种计算方法应用很广啊，例如流式数据朴素的平均数计算相当浪费内存，如果也可以这样……，果然数学优化比工程优化要牛逼的多啊）。</p>
+<h2 id="总结">总结</h2>
+<p><strong>Load average 其实就是任务队列的长度（TASK_RUNNING, TASK_UNINTERRUPTIBLE进程的数量）的MOVING AVERAGES</strong></p>
+<blockquote>
+<p>很显然，TASK_UNINTERRUPTIBLE状态的进程数量如果增多，也会引起load average 增高，但是TASK_UNINTERRUPTIBLE状态的进程并没有在消耗CPU，例如可能是在做IO 等待等，所以load 如果短时升高，也没有问题；同样，如果长时间很高，也有可能是磁盘IO负载较高引起的。</p>
+</blockquote>
+<blockquote>
+<p>load 其实没有一个纸面上的阈值，只能凭借对操作系统知识的了解，以及工作场景等实际经验来判断load的含义，其值也只是用来发现问题，而不是解释问题的，如果发现load过高，还是需要在实际场景上去寻找问题原因，进行针对性优化</p>
+</blockquote>
+<hr>
+<p><strong>参考资料：</strong></p>
+<ol>
+<li><a href="http://www.linfo.org/process_state.html">Process State Definition</a></li>
+<li><a href="https://www.kernel.org/doc/Documentation/scheduler/sched-design-CFS.txt">CFS Scheduler</a></li>
+<li><a href="http://www.linuxjournal.com/article/9001?page=0,1">Examining Load Average</a></li>
+<li><a href="http://dbanotes.net/arch/unix_linux_load.html">Unix/Linux 的 Load 初级解释 </a></li>
+<li><a href="http://blog.scoutapp.com/articles/2009/07/31/understanding-load-averages">Understanding linux cpu load - when should you be worried?</a></li>
+<li><a href="http://www.teamquest.com/files/9214/2049/9761/ldavg1.pdf">UNIX Load Average Part 1: How It Works</a></li>
+<li><a href="http://www.teamquest.com/files/6714/2049/9760/ldavg2.pdf">UNIX Load Average Part 2: Not Your Average Average</a></li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-05-05
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2016-06-27-ieee-floating-point-summary/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">浮点数问题探究</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2014-11-29-daemon-ho-to/">
+            <span class="next-text nav-default">如何实现一个 daemon</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

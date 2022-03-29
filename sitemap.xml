@@ -1,0 +1,283 @@
+<?xml-stylesheet type="text/xsl" href="http://1feng.github.io/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://1feng.github.io/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2021-04-14-hello-world/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/</loc>
+    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/</loc>
+    <lastmod>2017-06-16T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/distribute/</loc>
+    <lastmod>2017-06-16T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-16-smarter/</loc>
+    <lastmod>2017-06-16T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/system/</loc>
+    <lastmod>2017-06-16T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-15-linearizability/</loc>
+    <lastmod>2017-06-15T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-14-weak-consistency/</loc>
+    <lastmod>2017-06-14T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-13-zab/</loc>
+    <lastmod>2017-06-13T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-12-paxos-made-simple/</loc>
+    <lastmod>2017-06-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-11-3pc/</loc>
+    <lastmod>2017-06-11T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-10-2pc/</loc>
+    <lastmod>2017-06-10T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-09-correctness/</loc>
+    <lastmod>2017-06-09T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-08-cap/</loc>
+    <lastmod>2017-06-08T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-07-acid/</loc>
+    <lastmod>2017-06-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-06-unreliable-network/</loc>
+    <lastmod>2017-06-06T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-05-timing-and-order/</loc>
+    <lastmod>2017-06-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-05-vector-clock/</loc>
+    <lastmod>2017-06-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2017-06-03-time-clocks-and-the-ordering-of-events-in-a-distributed-system/</loc>
+    <lastmod>2017-06-03T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/leveldb/</loc>
+    <lastmod>2016-09-10T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-09-10-leveldb-read/</loc>
+    <lastmod>2016-09-10T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-09-06-leveldb-compact/</loc>
+    <lastmod>2016-09-06T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-08-24-mvcc-and-manifest/</loc>
+    <lastmod>2016-08-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-08-22-sstable-summary/</loc>
+    <lastmod>2016-08-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-08-18-leveldb-write/</loc>
+    <lastmod>2016-08-18T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/concurrency/</loc>
+    <lastmod>2016-07-20T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-07-20-signal-with-mutex-locked-or-not/</loc>
+    <lastmod>2016-07-20T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-07-08-google-file-system-summary/</loc>
+    <lastmod>2016-07-08T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-06-27-ieee-floating-point-summary/</loc>
+    <lastmod>2016-06-27T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/linux/</loc>
+    <lastmod>2016-05-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2016-05-05-linux-cpu-load/</loc>
+    <lastmod>2016-05-05T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/daemon/</loc>
+    <lastmod>2014-11-29T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2014-11-29-daemon-ho-to/</loc>
+    <lastmod>2014-11-29T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/cpp/</loc>
+    <lastmod>2014-04-27T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/hello/</loc>
+    <lastmod>2014-04-27T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2014-04-27-hello-world/</loc>
+    <lastmod>2014-04-27T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/stdbind/</loc>
+    <lastmod>2014-04-27T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2014-04-27-std-bind-in-c-plus-plus/</loc>
+    <lastmod>2014-04-27T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/tags/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+</urlset>

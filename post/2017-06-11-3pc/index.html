@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>三阶段提交 - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="Why 1983年由Dale Skeen 和 Michael Stonebraker提出了3PC协议来解决2PC阻塞的问题 #What 3PC（two-phase-commit）其实就是" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2017-06-11-3pc/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="三阶段提交" />
+<meta property="og:description" content="Why 1983年由Dale Skeen 和 Michael Stonebraker提出了3PC协议来解决2PC阻塞的问题 #What 3PC（two-phase-commit）其实就是" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2017-06-11-3pc/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-06-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-06-11T00:00:00+00:00" />
+
+<meta itemprop="name" content="三阶段提交">
+<meta itemprop="description" content="Why 1983年由Dale Skeen 和 Michael Stonebraker提出了3PC协议来解决2PC阻塞的问题 #What 3PC（two-phase-commit）其实就是"><meta itemprop="datePublished" content="2017-06-11T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2017-06-11T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1849">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="三阶段提交"/>
+<meta name="twitter:description" content="Why 1983年由Dale Skeen 和 Michael Stonebraker提出了3PC协议来解决2PC阻塞的问题 #What 3PC（two-phase-commit）其实就是"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">三阶段提交</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-06-11 </span>
+        <div class="post-category">
+            <a href="/categories/distribute/"> distribute </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#why">Why</a></li>
+    <li><a href="#how">How</a></li>
+    <li><a href="#weakness">Weakness</a></li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="why">Why</h1>
+<p>1983年由Dale Skeen 和 Michael Stonebraker<a href="https://github.com/1Feng/learn-distributed-systems/blob/master/theory/consensus/atomic-commit-protocols/3PC/A-Formal-Model-of-Crash-Recovery-in-a-Distributed-System.pdf">提出</a>了3PC协议来解决2PC阻塞的问题
+#What
+3PC（two-phase-commit）其实就是将2PC的Phase 2拆分成了两个阶段：</p>
+<p><strong>时序图</strong></p>
+<p><img src="/images/blog_images/3pc/3pc.png" alt=""></p>
+<ul>
+<li>Phase 1:
+<ul>
+<li>Transaction coordinator(TC)首先写日志(write-ahead-log)记录事务执行状态，然后向所有Participants广播PREPARE消息，询问participant是否准备好commit（回复YES）或者选择abort（回复NO）</li>
+<li>Participant收到PREPARE消息后，开始执行事务（考虑ACID-isolation，此时已经持有各种锁），如果执行中有任何问题则回复abort，如果事务执行完成则回复YES</li>
+<li>TC收到所有的回复，进入Phase 2</li>
+</ul>
+</li>
+<li>Phase 2:
+<ul>
+<li>如果TC收到的响应均为YES，则向participants广播PRE-COMMIT消息，否则广播ABORT消息（广播之前需更新日志，记录事务执行状态）</li>
+<li>如果participant收到PRE-COMMIT消息，回复ACK</li>
+<li>如果participant收到ABORT消息，终止事务</li>
+</ul>
+</li>
+<li>Phase 3:
+<ul>
+<li>如果TC在超时时间内收到所有的ack，则向participants广播COMMIT消息，否则广播ABORT消息（广播之前需更新日志，记录事务执行状态）</li>
+<li>Participant收到COMMIT/ABORT消息后，将事务正式commit/abort（考虑ACID-isolation，commit/abort完成后会释放所有锁）并回复ack</li>
+</ul>
+</li>
+</ul>
+<h1 id="how">How</h1>
+<p><strong>状态迁移图</strong>
+<img src="/images/blog_images/3pc/3pc-state-machine.png" alt=""></p>
+<p>来看异常处理的情况：</p>
+<ul>
+<li>Phase 1:
+<ul>
+<li>Transaction coordinator（TC）发送PREPARE之后，如果超时时间内未收到响应，则放弃该事务，进入Phase 2 向所有participants广播ABORT
+<ul>
+<li>此时收到ABORT的participants会正常终止事务</li>
+</ul>
+</li>
+<li>当Participant收到PREPARE后，如果回复YES的时候超时（无法确定TC是否收到消息），retry几次后进入Phase 2</li>
+<li>当Participant收到PREPARE后，如果回复NO的时候超时（无论TC是否收到，TC都会进入Phase 2然后广播ABORT消息），重试几次之后可以主动终止事务</li>
+</ul>
+</li>
+<li>Phase 2:
+<ul>
+<li>TC发送了PRE-COMMIT/ABORT消息之后，如果长时间没有收到ack或者宕机重启之后都会进入Phase 3，发送ABORT消息</li>
+<li>Participants如果长时间没有收到PRE-COMMIT消息，则可以主动终止事务</li>
+<li>Participants如果收到PRE-COMMIT后，回复ack之前发生宕机，则可以主动终止事务</li>
+</ul>
+</li>
+<li>Phase 3:
+<ul>
+<li>TC发送了COMMIT/ABORT消息之后，如果长时间没有收到ack或者宕机重启之后都会根据write-ahead-log的内容重新发送消息，重试几次后结束（如果是发送COMMIT，则意味着TC认为事务已经完成；ABORT消息同理）</li>
+<li>Participants如果长时间没有收到COMMIT/ABORT消息，执行commit</li>
+</ul>
+</li>
+</ul>
+<h1 id="weakness">Weakness</h1>
+<blockquote>
+<p>3PC是一个理想状态的协议，假设fail-stop模型，并且可以通过timeout来准确判断网络故障还是宕机的情景(synchronous systems)下的协议（上文我们是按照真实环境来分析解析的）</p>
+</blockquote>
+<ul>
+<li>所以典型的一个3PC的冲突情景如下：
+ - Phase 2 TC 广播PRE-COMMIT消息，如果P1在收到消息前宕机，因而TC在Phase 3广播ABORT消息
+<ul>
+<li>在Phase 2，P2回复ack之后进入Phase 3，并且与TC直接发生网络分区(network-partition)导致P2无法收到ABORT消息，故而自行决定commit</li>
+</ul>
+</li>
+<li>网络通信需要3 RTT，开销较大</li>
+</ul>
+<p>其他:</p>
+<ul>
+<li>标准的3PC假设的前提是理想状态，即fail-stop（the server only exhibits crash failures，且不恢复）模型</li>
+<li>标准的3PC描述Phase 3时，如果TC收到多数(majority)的ack，即可广播COMMIT（没有收到ack则意味着participant宕机且不恢复）</li>
+<li>根据以上两点，所以标准的3PC在synchronous systems（有限的timeout）下是可行的方案（上文的典型冲突情景不再发生）</li>
+</ul>
+<p>PS：</p>
+<ul>
+<li>根据<a href="https://github.com/1Feng/learn-distributed-systems/blob/master/theory/consensus/F-L-P/README.md">F·L·P定理</a>在asynchronous system 模型下实现分布式共识是不可能的，但是实践之中我们能尽可能的去达成共识</li>
+</ul>
+<h1 id="reference">Reference</h1>
+<p>[1]. <a href="https://github.com/1Feng/learn-distributed-systems/blob/master/theory/consensus/atomic-commit-protocols/3PC/A-Formal-Model-of-Crash-Recovery-in-a-Distributed-System.pdf">D. Skeen and M. Stonebraker, “A Formal Model of Crash Recovery in a Distributed Systems,” IEEE Transactions on Software Engineering, SE-9, 3, (May 1983), pp. 219–228.</a></p>
+<p>[2]. <a href="https://www.amazon.com/Distributed-Systems-Algorithmic-Approach-Information/dp/1466552972">Sukumar Ghosh. 《Distributed Systems An Algorithmic Approach Second Edition》 14.5 Atomic Commit Protocols</a></p>
+<p>[3]. <a href="http://courses.cs.vt.edu/~cs5204/fall00/distributedDBMS/sreenu/3pc.html">Three-Phase Commit Protocol</a></p>
+<p>[4]. <a href="https://roxanageambasu.github.io/ds-class//assets/lectures/lecture17.pdf">Distributed Systems W4995-1 Fall 2014 lecture17 </a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-06-11
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2017-06-12-paxos-made-simple/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Paxos made simple</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2017-06-10-2pc/">
+            <span class="next-text nav-default">两阶段提交</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

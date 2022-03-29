@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>leveldb 源码笔记之 Read - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2016-09-10-leveldb-read/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="leveldb 源码笔记之 Read" />
+<meta property="og:description" content="key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2016-09-10-leveldb-read/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-09-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-09-10T00:00:00+00:00" />
+
+<meta itemprop="name" content="leveldb 源码笔记之 Read">
+<meta itemprop="description" content="key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实"><meta itemprop="datePublished" content="2016-09-10T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2016-09-10T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1060">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="leveldb 源码笔记之 Read"/>
+<meta name="twitter:description" content="key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">leveldb 源码笔记之 Read</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-09-10 </span>
+        <div class="post-category">
+            <a href="/categories/distribute/"> distribute </a>
+            <a href="/categories/system/"> system </a>
+            <a href="/categories/leveldb/"> leveldb </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#key逻辑分类">key逻辑分类</a></li>
+            <li><a href="#读操作">读操作</a></li>
+            <li><a href="#cache">cache</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="key逻辑分类">key逻辑分类</h3>
+<p>根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实际存储格式会略微有差异，代码里按照存储的位置，划分为以下几种类型：</p>
+<blockquote>
+<p><strong>memtable</strong>: 逻辑上称为memtable_key</p>
+</blockquote>
+<blockquote>
+<p><strong>sstalbe</strong>: 逻辑上称为internal_key</p>
+</blockquote>
+<blockquote>
+<p><strong>key</strong>: 用户提供的key，我们称之为user_key</p>
+</blockquote>
+<p>当用户去查询某个key时，leveldb会先利用key构建起Lookupkey类</p>
+<p>Lookupkey类内部的完整数据即memtable_key，可以方便的利用成员函数截取memtable_key,internal_key,user_key以方便去memtalble和sstable中查询</p>
+<p>事实上LookupKey是由 key， sequence number组成的，如之前文章提到:</p>
+<ul>
+<li>如果普通Get()操作，sequence number 为 last sequence number</li>
+<li>如果是使用的snapshot, sequence number 为 snapshot sequence number</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// dbformat.h
+</span></span></span><span class="line"><span class="cl"><span class="c1">// lookup key format:
+</span></span></span><span class="line"><span class="cl"><span class="c1">// start_       kstart_                                         end_
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   |             |                                             |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   |             |&lt;--user_key--&gt;|                              |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   |             |&lt;---------------internal_key----------------&gt;|
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   |&lt;---------------------memtable_key------------------------&gt;|
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   -------------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   |  1--5 byte  | klenght byte |           8 byte             |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   -------------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   | klenght + 8 |   raw key    | pack(sequence number, type)) |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   -------------------------------------------------------------
+</span></span></span><span class="line"><span class="cl"><span class="c1">// A helper class useful for DBImpl::Get()
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">class</span> <span class="nc">LookupKey</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Initialize *this for looking up user_key at a snapshot with
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// the specified sequence number.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">LookupKey</span><span class="p">(</span><span class="k">const</span> <span class="n">Slice</span><span class="o">&amp;</span> <span class="n">user_key</span><span class="p">,</span> <span class="n">SequenceNumber</span> <span class="n">sequence</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="o">~</span><span class="n">LookupKey</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Return a key suitable for lookup in a MemTable.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">Slice</span> <span class="nf">memtable_key</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">Slice</span><span class="p">(</span><span class="n">start_</span><span class="p">,</span> <span class="n">end_</span> <span class="o">-</span> <span class="n">start_</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Return an internal key (suitable for passing to an internal iterator)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">Slice</span> <span class="nf">internal_key</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">Slice</span><span class="p">(</span><span class="n">kstart_</span><span class="p">,</span> <span class="n">end_</span> <span class="o">-</span> <span class="n">kstart_</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Return the user key
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">Slice</span> <span class="nf">user_key</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">Slice</span><span class="p">(</span><span class="n">kstart_</span><span class="p">,</span> <span class="n">end_</span> <span class="o">-</span> <span class="n">kstart_</span> <span class="o">-</span> <span class="mi">8</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">start_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">kstart_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">end_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">space_</span><span class="p">[</span><span class="mi">200</span><span class="p">];</span>      <span class="c1">// Avoid allocation for short keys
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// No copying allowed
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">LookupKey</span><span class="p">(</span><span class="k">const</span> <span class="n">LookupKey</span><span class="o">&amp;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">LookupKey</span><span class="o">&amp;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如图:
+<img src="/images/blog_images/leveldb/leveldb-keys.png" alt=""></p>
+<h3 id="读操作">读操作</h3>
+<p>图示Get()操作的基本逻辑如下：
+<img src="/images/blog_images/leveldb/leveldb-read.png" alt="">
+以上我们是假设sstable没有filter的情况下的操作逻辑</p>
+<h3 id="cache">cache</h3>
+<p>无论是table cache，还是block cache，都是使用了相同的数据结构LRUCache来实现的，区别只在于内部存储的数据不同。</p>
+<p>LRUCache是通过k/v方式存储的，对于：</p>
+<p><strong>TableCache</strong>:</p>
+<ul>
+<li>key: 其实就是file number</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// table_cache.cc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="k">sizeof</span><span class="p">(</span><span class="n">file_number</span><span class="p">)];</span>
+</span></span><span class="line"><span class="cl"><span class="n">EncodeFixed64</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">file_number</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">Slice</span> <span class="nf">key</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>value: TableAndFile， 其实主要是sstable index block里的数据</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// table_cache.cc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="nc">TableAndFile</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">RandomAccessFile</span><span class="o">*</span> <span class="n">file</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Table</span><span class="o">*</span> <span class="n">table</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// table.cc
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Table里的主要数据即下述
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="nc">Table</span><span class="o">::</span><span class="n">Rep</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Rep</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">delete</span> <span class="n">filter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">delete</span> <span class="p">[]</span> <span class="n">filter_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">delete</span> <span class="n">index_block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Options</span> <span class="n">options</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Status</span> <span class="n">status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">RandomAccessFile</span><span class="o">*</span> <span class="n">file</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">cache_id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FilterBlockReader</span><span class="o">*</span> <span class="n">filter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filter_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">BlockHandle</span> <span class="n">metaindex_handle</span><span class="p">;</span>  <span class="c1">// Handle to metaindex_block: saved from footer
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Block</span><span class="o">*</span> <span class="n">index_block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>BlockCache</strong>:</p>
+<ul>
+<li>key: 其实是 cache_id 和 block 在sstable中的offset的组合</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// table.cc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">char</span> <span class="n">cache_key_buffer</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 构造block_cache 的key
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">EncodeFixed64</span><span class="p">(</span><span class="n">cache_key_buffer</span><span class="p">,</span> <span class="n">table</span><span class="o">-&gt;</span><span class="n">rep_</span><span class="o">-&gt;</span><span class="n">cache_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">EncodeFixed64</span><span class="p">(</span><span class="n">cache_key_buffer</span><span class="o">+</span><span class="mi">8</span><span class="p">,</span> <span class="n">handle</span><span class="p">.</span><span class="n">offset</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="n">Slice</span> <span class="nf">key</span><span class="p">(</span><span class="n">cache_key_buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cache_key_buffer</span><span class="p">));</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>value: data block 内容</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// block.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">class</span> <span class="nc">Block</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Initialize the block with the specified contents.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">explicit</span> <span class="n">Block</span><span class="p">(</span><span class="k">const</span> <span class="n">BlockContents</span><span class="o">&amp;</span> <span class="n">contents</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="o">~</span><span class="n">Block</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">size_t</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">size_</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Iterator</span><span class="o">*</span> <span class="nf">NewIterator</span><span class="p">(</span><span class="k">const</span> <span class="n">Comparator</span><span class="o">*</span> <span class="n">comparator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">uint32_t</span> <span class="n">NumRestarts</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">size_t</span> <span class="n">size_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">uint32_t</span> <span class="n">restart_offset_</span><span class="p">;</span>     <span class="c1">// Offset in data_ of restart array
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">bool</span> <span class="n">owned_</span><span class="p">;</span>                  <span class="c1">// Block owns data_[]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// No copying allowed
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">Block</span><span class="p">(</span><span class="k">const</span> <span class="n">Block</span><span class="o">&amp;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Block</span><span class="o">&amp;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">class</span> <span class="nc">Iter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="cache-逻辑结构图示">cache 逻辑结构图示</h4>
+<p><img src="/images/blog_images/leveldb/leveldb-cache.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-09-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2017-06-03-time-clocks-and-the-ordering-of-events-in-a-distributed-system/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">《Time, clocks, and the ordering of events in a distributed system》summary</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2016-09-06-leveldb-compact/">
+            <span class="next-text nav-default">leveldb 源码笔记之 Compact</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

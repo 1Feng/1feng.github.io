@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>弱一致性 - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="Introduce 对于CAP而言，partition-tolerant是客观的必须要做的，不然不能称之为分布式系统；而consistent和availabl" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2017-06-14-weak-consistency/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="弱一致性" />
+<meta property="og:description" content="Introduce 对于CAP而言，partition-tolerant是客观的必须要做的，不然不能称之为分布式系统；而consistent和availabl" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2017-06-14-weak-consistency/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-06-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-06-14T00:00:00+00:00" />
+
+<meta itemprop="name" content="弱一致性">
+<meta itemprop="description" content="Introduce 对于CAP而言，partition-tolerant是客观的必须要做的，不然不能称之为分布式系统；而consistent和availabl"><meta itemprop="datePublished" content="2017-06-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2017-06-14T00:00:00+00:00" />
+<meta itemprop="wordCount" content="652">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="弱一致性"/>
+<meta name="twitter:description" content="Introduce 对于CAP而言，partition-tolerant是客观的必须要做的，不然不能称之为分布式系统；而consistent和availabl"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">弱一致性</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-06-14 </span>
+        <div class="post-category">
+            <a href="/categories/distribute/"> distribute </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduce">Introduce</a>
+      <ul>
+        <li><a href="#data-centric-consistent-models">Data-centric consistent models</a>
+          <ul>
+            <li><a href="#causal-consistency">Causal Consistency</a></li>
+          </ul>
+        </li>
+        <li><a href="#client-centric-consistent-models">Client-centric consistent models</a>
+          <ul>
+            <li><a href="#eventual-consistency">Eventual Consistency</a></li>
+          </ul>
+        </li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="introduce">Introduce</h1>
+<blockquote>
+<p>对于CAP而言，partition-tolerant是客观的必须要做的，不然不能称之为分布式系统；而consistent和available则是主观的，
+应当根据业务需求适当调整的。相对于linearizability的强一致，其实还有多种弱一致性模型可以供系统设计时参考, 这里着重描述两种重要的一致性模型</p>
+</blockquote>
+<h2 id="data-centric-consistent-models">Data-centric consistent models</h2>
+<h3 id="causal-consistency">Causal Consistency</h3>
+<blockquote>
+<p>与linearizability相同，causal consistency同样属于data-centric consistent models。与前者明显的区别在于，linearizability的系统的所有操作都存在total order，而causal consistency只需要partial order即可。</p>
+</blockquote>
+<h4 id="定义">定义：</h4>
+<blockquote>
+<p>对于所有的进程看到的所有的写操作，都是因果相关的（causally related）且顺序相同。所有的读操作看到的结果也需要和写的因果顺序一致</p>
+</blockquote>
+<p>如图：
+<img src="/images/blog_images/weak_consistency/causal-consistency.png" alt=""></p>
+<p>两次写操作没有因果关系（concurrence），所以后续的两个client的读结果不相同，但这符合causal consistency的定义</p>
+<h4 id="how">How</h4>
+<p>实现causally related partital order即可，例如vector clock + causal order multicast protocol</p>
+<h2 id="client-centric-consistent-models">Client-centric consistent models</h2>
+<h3 id="eventual-consistency">Eventual Consistency</h3>
+<blockquote>
+<p>最终一致性比较好容易理解，很多primary-backup(asynchronous)架构的RDBMS都是使用的最终一致性模型</p>
+</blockquote>
+<h4 id="定义-1">定义：</h4>
+<blockquote>
+<p>如果没有新的更新/写入，最终所有的clients都会看到最新的数据</p>
+</blockquote>
+<p>最终是多久，不好说&hellip;</p>
+<h4 id="典型例子">典型例子：</h4>
+<p>DNS系统</p>
+<h4 id="how-1">How</h4>
+<p>asynchronous log shipping + gossip protocal</p>
+<h2 id="references">References</h2>
+<ol>
+<li><a href="https://www.amazon.com/Distributed-Systems-Algorithmic-Approach-Information/dp/1466552972">《Distributed Systems An Algorithmic Approach Second Edition》16.3 16.4</a></li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-06-14
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2017-06-15-linearizability/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">线性一致性</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2017-06-13-zab/">
+            <span class="next-text nav-default">zab 算法总结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

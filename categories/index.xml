@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on 1Feng&#39;s Blog</title>
+    <link>http://1feng.github.io/categories/</link>
+    <description>Recent content in Categories on 1Feng&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 16 Jun 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://1feng.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>distribute</title>
+      <link>http://1feng.github.io/categories/distribute/</link>
+      <pubDate>Fri, 16 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/distribute/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>system</title>
+      <link>http://1feng.github.io/categories/system/</link>
+      <pubDate>Fri, 16 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/system/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>leveldb</title>
+      <link>http://1feng.github.io/categories/leveldb/</link>
+      <pubDate>Sat, 10 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/leveldb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>concurrency</title>
+      <link>http://1feng.github.io/categories/concurrency/</link>
+      <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/concurrency/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>http://1feng.github.io/categories/linux/</link>
+      <pubDate>Thu, 05 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>daemon</title>
+      <link>http://1feng.github.io/categories/daemon/</link>
+      <pubDate>Sat, 29 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/daemon/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cpp</title>
+      <link>http://1feng.github.io/categories/cpp/</link>
+      <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/cpp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hello</title>
+      <link>http://1feng.github.io/categories/hello/</link>
+      <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/hello/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>std::bind</title>
+      <link>http://1feng.github.io/categories/stdbind/</link>
+      <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://1feng.github.io/categories/stdbind/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

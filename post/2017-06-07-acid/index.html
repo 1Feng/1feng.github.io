@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>What is ACID - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="What Atomicity 描述： 一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2017-06-07-acid/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="What is ACID" />
+<meta property="og:description" content="What Atomicity 描述： 一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2017-06-07-acid/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-06-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-06-07T00:00:00+00:00" />
+
+<meta itemprop="name" content="What is ACID">
+<meta itemprop="description" content="What Atomicity 描述： 一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务"><meta itemprop="datePublished" content="2017-06-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2017-06-07T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3393">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="What is ACID"/>
+<meta name="twitter:description" content="What Atomicity 描述： 一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">What is ACID</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-06-07 </span>
+        <div class="post-category">
+            <a href="/categories/distribute/"> distribute </a>
+            <a href="/categories/system/"> system </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what">What</a>
+      <ul>
+        <li><a href="#atomicity">Atomicity</a></li>
+        <li><a href="#consistency">Consistency</a></li>
+        <li><a href="#islation">Islation</a></li>
+        <li><a href="#durability">Durability</a></li>
+      </ul>
+    </li>
+    <li><a href="#how">How</a>
+      <ul>
+        <li><a href="#atomicity-">Atomicity ★★★★</a></li>
+        <li><a href="#consistency-">Consistency ★★</a></li>
+        <li><a href="#islation-">Islation ★★★★★</a></li>
+        <li><a href="#durability-">Durability ★★★★</a></li>
+      </ul>
+    </li>
+    <li><a href="#serializability">Serializability</a>
+      <ul>
+        <li><a href="#what-1">What</a></li>
+        <li><a href="#how-1">How</a></li>
+        <li><a href="#serializability-vs-linearizability">Serializability VS Linearizability</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="what">What</h1>
+<h2 id="atomicity">Atomicity</h2>
+<p><strong>描述</strong>：</p>
+<p>一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务，并且撤销已经完成的部分操作</p>
+<p><strong>优势</strong>：</p>
+<p>方便异常处理，如果事务终止，应用层面可以确保什么修改都没有发生，可以安全的重试</p>
+<p><strong>典型案例</strong>：</p>
+<p>A向B账户转账100元：</p>
+<ol>
+<li>从A的账户减少100元</li>
+<li>从B的账户增加100元</li>
+</ol>
+<p>如果1执行完成2还未执行，此时数据库故障(<code>system fails</code>)，则为了保证Atomicity，数据库的事务系统需要回滚1操作</p>
+<p><strong>其他</strong>：</p>
+<blockquote>
+<p>这里需要与concurrency-atomic做一下区分, concurrency-atomic指的是当某个线程执行某个操作时，其他线程不可能看到中间状态(half-finished)</p>
+</blockquote>
+<h2 id="consistency">Consistency</h2>
+<p><strong>描述</strong>：</p>
+<p>这里的consistency是指，当事务结束时，系统（数据库）处于一个合法的状态(valid state),也就是说系统总是从一个合法的状态迁移至另一个合法的状态</p>
+<p><strong>其他</strong>：</p>
+<ol>
+<li>ACID-consistency是一个比较模糊的概念，状态迁移是系统的用户来保证的，系统只能保证其中一部分，不能完全覆盖，所以consistency依赖用户而不是系统</li>
+<li>MSDN给出的例子<a href="https://msdn.microsoft.com/en-us/library/aa480356.aspx">[2]</a>和Atomicity类似，但是差别在于A中事务终止回滚时因为system fails，而C中事务终止回滚是因为error（比如类型不匹配，数字和字符串做加法？）</li>
+<li>ACID-consistency 和CAP-consistency直接没有任何关系，仅仅使用了同一个单词而已</li>
+</ol>
+<h2 id="islation">Islation</h2>
+<p><strong>描述</strong>：</p>
+<p>Isolation是指当多个事务并发(concurrency)执行时，应该彼此之间存在隔离，执行过程中互不影响</p>
+<h2 id="durability">Durability</h2>
+<p><strong>描述</strong>：</p>
+<p>一旦事务成功提交，即使发生硬件故障或者程序崩溃，任何已经写入的数据都不能丢失</p>
+<h1 id="how">How</h1>
+<h2 id="atomicity-">Atomicity ★★★★</h2>
+<p>可以利用持久化日志来实现，方便重启回滚</p>
+<h2 id="consistency-">Consistency ★★</h2>
+<p>数据库层面做足够的合法性检测，其他由用户层/应用层来保证</p>
+<h2 id="islation-">Islation ★★★★★</h2>
+<p><strong>先看几点要求</strong>：</p>
+<ul>
+<li>Read commited（weak-islation type） 的两点要求
+<ul>
+<li>No Dirty Read: 不会读取到其他正在执行的事务中间状体的数据</li>
+<li>No Dirty Write: 事务不会overwrite到其他事务的uncommitted的数据</li>
+</ul>
+</li>
+<li>No Read Skew：
+<ul>
+<li>Read Skew举例：
+<ul>
+<li>A 在两个账户中各存放了500块钱，现在A要查询两个账户的余额</li>
+<li>查询账户1的SQL执行完成，余额500</li>
+<li>假设A之前设置了一笔定时的自动转账被触发，从账户2向账户1转100块，事务执行成功，账户1余额600，账户2余额400</li>
+<li>查询账户2的SQL执行完成，余额400</li>
+<li>在A看来，账户总额少了100块</li>
+<li>即使如此这个场景还是可以接受的，因为A可以重新查询，即可获得正常结果</li>
+</ul>
+</li>
+<li>无法接受Read Skew的两个场景：
+<ul>
+<li>Backup
+<ul>
+<li>事务执行的同时，可以完成数据备份</li>
+</ul>
+</li>
+<li>Analytic Queries and Integrity checks
+<ul>
+<li>事务执行的同时, 需要完成大量数据的查询或扫描</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Read-Modify-Write / Atomic Write Operation
+<ul>
+<li>举例：两个用户同时对一个counter字段做inc操作，后果与多线程并发操作类似会丢失一部分inc操作</li>
+</ul>
+</li>
+<li>Write Skew
+<ul>
+<li>举例（针对multi-object的场景）：
+<ul>
+<li>两位医生Alice 和 Bob同时检查当前是否有另外一个人正在值班，如果有则在系统中停止自己的值班状态，然后回家睡觉</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">    </span><span class="n">Alice执行事务如下</span><span class="err">：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">currently_on_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">doctors</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">on_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">shift_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currently_on_call</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">update</span><span class="w"> </span><span class="n">doctors</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">on_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="err">‘</span><span class="n">Alice</span><span class="err">’</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">shift_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Bob执行事务如下</span><span class="err">：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">currently_on_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">doctors</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">on_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">shift_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currently_on_call</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">update</span><span class="w"> </span><span class="n">doctors</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">on_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="err">‘</span><span class="n">Bob</span><span class="err">’</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">shift_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">有点像是</span><span class="n">multi</span><span class="o">-</span><span class="n">object版本的read</span><span class="o">-</span><span class="k">modify</span><span class="o">-</span><span class="k">write</span><span class="err">，但是有本质区别</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>解决方案</strong>：</p>
+<ul>
+<li>Read commited
+<ul>
+<li>Dirty Write: 可以使用row-level lock来避免dirty write</li>
+<li>Dirty Read:
+<ul>
+<li>同样可以使用row-level lock来避免dirty read,但是缺点在于一个比较耗时的写操作会阻塞住read-only的操作，更严重的是会因此引发连锁反应</li>
+<li>更好的解决方法是使用类似于MVCC的snapshot-isolation方案来解决dirty read的问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>No Read Skew
+<ul>
+<li>类似于MVCC的snapshot-isolation方案来解决read skew问题，可同时满足Backup和Analytic Queries and Integrity checks的需求</li>
+</ul>
+</li>
+<li>Read-Modiry-Write / Atomic Write Operation
+<ul>
+<li>使用显示的锁操作(explicit-locking)来实现atomic write operation</li>
+<li>automatically-detecting-lost-update，一旦检测到lost update，事务需要终止并且retry</li>
+<li>实现compare-and-set操作用以支持SQL-where语句</li>
+</ul>
+</li>
+<li>Write Skew
+<ul>
+<li>串行化（serializability）隔离所有事务，这种方式可以解决上述除read skew外所有问题，但是工程实现上往往性能会是一个非常大的问题</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>通常为了实现isolation，都是综合以上各种方案</p>
+</blockquote>
+<h2 id="durability-">Durability ★★★★</h2>
+<p>磁盘+replica</p>
+<h1 id="serializability">Serializability</h1>
+<h2 id="what-1">What</h2>
+<blockquote>
+<p>serializable-isolation 是最强等级的事务并发隔离，他可以确保即使多个事务是并行(parallel)执行的,最终的结果看起来也像是顺序的（serially），每个时间点只有一个事务在执行</p>
+</blockquote>
+<h2 id="how-1">How</h2>
+<blockquote>
+<p>根据上述描述，不难看出，其要求是让数据库解决所有的可能的并发竞争问题</p>
+</blockquote>
+<ul>
+<li>真的串行化的执行事务：</li>
+<li>方法：将所有的事务扔到一个队列里排队，由特定的线程来依次执行</li>
+<li>缺点：性能太差</li>
+<li>存储过程（stored procedures）+ in-memory data：</li>
+<li>解释：本质是加快单个事务的执行速度（没有了磁盘IO），以便可以真正串行化事务执行</li>
+<li>缺点：存储过程需要用户自己来用SQL/PL完成，调试测试监控都比较棘手，同时一旦用户完成的存储过程性能比较差，会造成恶劣的影响，甚至引发连锁反应</li>
+<li>数据分区(partitioning)</li>
+<li>解释：本质是将单机的性能问题通过scale out来加速</li>
+<li>缺点：事务执行涉及的数据不能跨分区</li>
+<li>Two-Phase-Locking(2PL)</li>
+<li>描述：
+<ul>
+<li>当事务需要读一个object时，必须先以shared mode获取锁；多个事务可以同时以shared mode获取锁，但是一旦有事务以exclusive mode持有了锁，其他事务必须等待</li>
+<li>如果事务想要写一个object，必须先以exclusive mode获取锁；区别于shared mode，同一时间只能有一个事务以exclusive mode持有锁</li>
+<li>如果事务先读一个object，然后又要写（read-modify-write）,则需要将锁从shared mode升级为exclusive mode</li>
+<li>一旦事务获取了锁，除非事务提交或者终止，否则不允许释放锁，这也是二阶段命名的由来；</li>
+</ul>
+</li>
+<li>解释：
+<ul>
+<li>Expanding phase（扩大阶段&ndash;事务执行中）: locks are acquired and no locks are released.</li>
+<li>Shrinking phase（收缩阶段&ndash;事务结束时）: locks are released and no locks are acquired.</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>吞吐量(through-put) 和 响应时间 与仅实现weak-isolation(如read-commit + No Read Skew)相比会比较差</li>
+<li>deadlock风险增大</li>
+</ul>
+</li>
+<li>Serializable Snapshot Isolation(SSI)</li>
+<li>与之前提到的snapshot-isolation相比，SSI为写操作增加了串行(serialization)冲突检测
+<ul>
+<li>detecting stale MVCC reads：针对write skew，如果事务提交时检测到之前的前置条件已经不成立了，则终止事务</li>
+<li>detecting writes that affect prior read：同样考虑write skew，数据库从index-level/table-level保存一些信息，以便当事务提交后可以检测其操作是否造成其他正在执行的事务读取的数据过期（前置条件失效），如果存在则主动通知该事务终止</li>
+</ul>
+</li>
+</ul>
+<h2 id="serializability-vs-linearizability">Serializability VS Linearizability</h2>
+<ul>
+<li>serializability： 事务隔离的属性，指事务执行的结果看起来像顺序的（串行的），以避免write skew</li>
+<li>linearizability： 指对读写共享数据的新近性（recency guarantee），与事务（把一系列操作看做整体来讨论）无关</li>
+</ul>
+<h1 id="references">References</h1>
+<p>[1]. <a href="http://dataintensive.net/">Martin Kleppmann. 《Designing Data-Intensive Applications》7.Transactions</a></p>
+<p>[2]. <a href="https://msdn.microsoft.com/en-us/library/aa480356.aspx">ACID properties</a></p>
+<p>[3]. <a href="http://www.bailis.org/blog/linearizability-versus-serializability/Linearizability">Linearizability versus Serializability</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-06-07
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2017-06-08-cap/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">CAP 问题</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2017-06-06-unreliable-network/">
+            <span class="next-text nav-default">Unreliable Network</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

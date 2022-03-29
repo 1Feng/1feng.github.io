@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://1feng.github.io/sitemap.xml

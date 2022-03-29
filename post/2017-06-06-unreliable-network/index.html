@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Unreliable Network - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="Introduce 众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点： 发送方无法确定接收方已经收到请求 发送方" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2017-06-06-unreliable-network/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Unreliable Network" />
+<meta property="og:description" content="Introduce 众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点： 发送方无法确定接收方已经收到请求 发送方" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2017-06-06-unreliable-network/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2017-06-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-06-06T00:00:00+00:00" />
+
+<meta itemprop="name" content="Unreliable Network">
+<meta itemprop="description" content="Introduce 众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点： 发送方无法确定接收方已经收到请求 发送方"><meta itemprop="datePublished" content="2017-06-06T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2017-06-06T00:00:00+00:00" />
+<meta itemprop="wordCount" content="594">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unreliable Network"/>
+<meta name="twitter:description" content="Introduce 众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点： 发送方无法确定接收方已经收到请求 发送方"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Unreliable Network</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-06-06 </span>
+        <div class="post-category">
+            <a href="/categories/distribute/"> distribute </a>
+            <a href="/categories/system/"> system </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#introduce">Introduce</a></li>
+        <li><a href="#synchronous-network">Synchronous network</a></li>
+        <li><a href="#asynchronous-network">Asynchronous network</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="introduce">Introduce</h2>
+<blockquote>
+<p>众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点：</p>
+<ol>
+<li>发送方无法确定接收方已经收到请求</li>
+<li>发送方无法无法知晓接收方是否处理完请求</li>
+</ol>
+<p>可以看出，以上指的都是从应用层的角度观察的结果，而引起以上问题的原因可能有：</p>
+<ul>
+<li>消息在路由队列中等待转发</li>
+<li>接收方队列满，发生丢包</li>
+<li>接收方处理完成，回复的消息在排队或发生丢包</li>
+<li>gc-stop-the-world等</li>
+</ul>
+</blockquote>
+<h2 id="synchronous-network">Synchronous network</h2>
+<p>像电话网络，有线电视网络等都是所谓synchronous network，他的特点如下：</p>
+<ul>
+<li>
+<p>一旦连接建立，即享用专线</p>
+</li>
+<li>
+<p>专线享有固定的带宽</p>
+</li>
+<li>
+<p>路由(routers)没有队列</p>
+</li>
+</ul>
+<p>以上决定了synchronous network的最大网络延迟是固定有上限的，即可以用timeout来判断消息传输是否存在问题</p>
+<h2 id="asynchronous-network">Asynchronous network</h2>
+<p>既然有synchronous network为什么还要搞以太网这一套呢？原因是为了充分利用带宽，由于互联网上数据传输的大小都不是固定的，使用专线意味着带宽资源的浪费。</p>
+<p>因此，Ehernet &amp;&amp; ip 使用了packed-switched协议, 具体如下：</p>
+<ol>
+<li>
+<p>路由引入队列，最大化线路使用率</p>
+</li>
+<li>
+<p>TCP层引入send buffer &amp;&amp; recv buffer来动态的适配数据传输速率(滑动窗口)</p>
+</li>
+</ol>
+<p>上述的优化本质是在latency和resource utilization之间做trade-off，也因此导致了无上限的延迟时间，即无法选择一个合适的timeoout来进行传输故障检测</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-06-06
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2017-06-07-acid/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">What is ACID</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2017-06-05-timing-and-order/">
+            <span class="next-text nav-default">Timing and Order</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
