@@ -24,7 +24,7 @@ categories:
 >> 每一个执行操作的用户，看到的都是数据库特定时刻的的快照(snapshot), writer的任何未完成的修改都不会被其他的用户所看到;当对数据进行更新的时候并是不直接覆盖，而是先进行标记, 然后在其他地方添加新的数据，从而形成一个新版本, 此时再来读取的reader看到的就是最新的版本了。所以这种处理策略是维护了多个版本的数据的,但只有一个是最新的。
 
 ### Key/Value
-如[前文](http://1feng.github.io/2016/08/18/leveldb-write/)所述，leveldb中写入一条记录，仅仅是先写入binlog，然后写入memtable
+如[前文](http://blog.1feng.me/post/2016-08-18-leveldb-write/)所述，leveldb中写入一条记录，仅仅是先写入binlog，然后写入memtable
 
 - **binlog**: binlog的写入只需要append，无需并发控制
 
@@ -32,7 +32,7 @@ categories:
 
 - **更新**: 真正写入memtable中参与skiplist排序的key其实是包含sequence number的，所以更新操作其实只是写入了一条新的k/v记录, 真正的更新由compact完成
 
-- **删除**: 如[前文](http://1feng.github.io/2016/08/18/leveldb-write/)提到，删除一条Key时，仅仅是将type标记为kTypeDeletion，写入(同上述写入逻辑)了一条新的记录，并没有真正删除,真正的删除也是由compact完成的
+- **删除**: 如[前文](http://blog.1feng.me/post/2016-08-18-leveldb-write/)提到，删除一条Key时，仅仅是将type标记为kTypeDeletion，写入(同上述写入逻辑)了一条新的记录，并没有真正删除,真正的删除也是由compact完成的
 
 #### Sequence Number
 - sequence number 是一个由VersionSet直接持有的全局的编号，每次写入（`注意批量写入时sequence number是相同的`），就会递增
