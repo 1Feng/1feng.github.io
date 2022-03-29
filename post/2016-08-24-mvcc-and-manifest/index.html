@@ -183,7 +183,7 @@
 </blockquote>
 </blockquote>
 <h3 id="keyvalue">Key/Value</h3>
-<p>如<a href="http://1feng.github.io/2016/08/18/leveldb-write/">前文</a>所述，leveldb中写入一条记录，仅仅是先写入binlog，然后写入memtable</p>
+<p>如<a href="http://blog.1feng.me/post/2016-08-18-leveldb-write/">前文</a>所述，leveldb中写入一条记录，仅仅是先写入binlog，然后写入memtable</p>
 <ul>
 <li>
 <p><strong>binlog</strong>: binlog的写入只需要append，无需并发控制</p>
@@ -195,7 +195,7 @@
 <p><strong>更新</strong>: 真正写入memtable中参与skiplist排序的key其实是包含sequence number的，所以更新操作其实只是写入了一条新的k/v记录, 真正的更新由compact完成</p>
 </li>
 <li>
-<p><strong>删除</strong>: 如<a href="http://1feng.github.io/2016/08/18/leveldb-write/">前文</a>提到，删除一条Key时，仅仅是将type标记为kTypeDeletion，写入(同上述写入逻辑)了一条新的记录，并没有真正删除,真正的删除也是由compact完成的</p>
+<p><strong>删除</strong>: 如<a href="http://blog.1feng.me/post/2016-08-18-leveldb-write/">前文</a>提到，删除一条Key时，仅仅是将type标记为kTypeDeletion，写入(同上述写入逻辑)了一条新的记录，并没有真正删除,真正的删除也是由compact完成的</p>
 </li>
 </ul>
 <h4 id="sequence-number">Sequence Number</h4>
