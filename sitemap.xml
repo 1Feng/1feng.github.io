@@ -3,28 +3,35 @@
   
   <url>
     <loc>http://1feng.github.io/</loc>
-    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://1feng.github.io/post/2021-04-14-hello-world/</loc>
-    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://1feng.github.io/post/</loc>
-    <lastmod>2018-01-01T16:01:23+08:00</lastmod>
+    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://1feng.github.io/categories/</loc>
-    <lastmod>2017-06-16T00:00:00+00:00</lastmod>
+    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/data-protection/</loc>
+    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/</loc>
+    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2022-03-31-data-abuse/</loc>
+    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
