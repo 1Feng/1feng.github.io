@@ -1,0 +1,143 @@
+---
+title: "《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary"
+date: 2022-08-05T15:02:44+08:00
+categories:
+    - MLOps 
+---
+
+本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解
+ 
+> [Machine Learning Operations (MLOps): Overview, Definition, and Architecture](https://arxiv.org/pdf/2205.02302v3.pdf)
+> 
+>Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl
+>
+>May 2022
+ 
+# 背景
+ 
+作者认为机器学习项目的终极目标是能够把算法能力产品化，同时能够在算法层面不断的进行产品迭代。这一目标对应的最大的挑战就是实现 ML 产品的自动化(automate)、可运营化(operationalize)。 MLOPs 这个概念就是为了应对这些挑战而产生的，但是这个概念目前仍然是个模糊不清的术语，专家们的解读也存在分歧。这篇论文的目的就是希望可以体系化的把 MLOps 这个概念弄清楚，从而为领域的研究人员和参与者提供一定的指引。
+ 
+业内虽然也存在 MLOps 相关的研究，但是作者们认为 ML 系统设计方面依旧缺少整体的概念化(conceptualization)、泛化(generalization)、清晰化(clarification)的内容。概念讲不清楚、理解不一致会引发 ML 系统落地的一系列的问题，所以尽可能定义清楚这个概念是很有必要的。
+ 
+ 
+# 研究方法
+ 
+作者花了不少篇幅讲自己的研究方法论，以此来提升结论的可信度，具体研究方法可以一图概括，即通过三种角度的研究来论证产出 MLOps 的体系化（4个维度解读）概念。
+
+
+![](/images/blog_images/mlops/Methodology.png)
+ 
+三种角度的研究方法
+* 文献调研 (Literature Review)
+* 工具调研(Tool Review)
+* 访谈学习(Interview Study)
+ 
+四个维度产出
+* 原则(Principles)
+* 技术组件(Components)
+* 人员角色(Roles)
+* 架构(Architecture)
+ 
+# 研究结论
+ 
+ 
+## MLOps 概念定义
+
+> **MLOps (Machine Learning Operations) is a paradigm**,including aspects like best practices, sets of concepts, as well as adevelopment culture when it comes to the end-to-endconceptualization, implementation, monitoring, deployment, andscalability of machine learning products.
+>
+>**Most of all**, it is anengineering practice that leverages three contributing disciplines:machine learning, software engineering (especially DevOps), anddata engineering. MLOps is aimed at productionizing machinelearning systems by bridging the gap between development (Dev)and operations (Ops).
+>
+>**Essentially**, MLOps aims to facilitate the creation of machine learning products by leveraging theseprinciples: CI/CD automation, workflow orchestration,reproducibility; versioning of data, model, and code;collaboration; continuous ML training and evaluation; MLmetadata tracking and logging; continuous monitoring; andfeedback loops.
+
+**MLOps 是一种范式**，是涉及 ML 产品端到端的从概念构想、实现、监控、部署到可扩展能力的一系列最佳实践、概念集、以及开发文化的一种范式。
+ 
+**最重要的**，它是涵盖了机器学习、软件工程、数据工程三大贡献学科的工程实践。MLOps 旨在通过弥合开发(Dev)和运营(Ops)之间的差距，促使机器学习系统产品化。
+ 
+**本质上**，MLOps 旨在利用一系列的原则（9大原则）来促进 ML 产品创造创新。
+ 
+ 
+## MLOps 的九大原则
+
+|序号| 原则| 备注  |
+|  :-: | :-:| :-: |
+|P1| CI/CD automation |就是常规的自动化CI/CD理念|
+|P2| Workflow orchestration(工作流编排) | 任务执行的顺序和依赖关系，一般通过Workflow Pipeline的方式利用DAG（有向无环图）实现|
+|P3| Reproducibility(可复现性)|算法实验有能力复现|
+|P4|Versioning(版本化)|数据、模型、代码、流程都要版本化，从而支撑P3和P7|
+|P5|Collaboration(协同)|基于数据、模型、代码的跨领域多角色的协同工作，既是一种能力，也代表一种被提倡的文化（减少领域孤岛）|
+|P6|Continuous ML training & evaluation(持续训练&评估)|能够基于监控体系、回环体系、自动化的workflow来周期性基于新数据重新训练和评估|
+|P7|ML metadata tracking/logging(元数据追踪/记录)|所有编排的workflow任务都能被记录和追踪，既包括任务也包括模型|
+|P8|Continuous monitoring(持续监控)|既包括系统层面，也包括算法指标层面（可以规避类似「concept drift」问题）|
+|P9|Feedback loops(反馈回环)| 线上反馈回环/研发过程中评估反馈回环|
+
+**「concept drift」 指**：模型试图预测的目标变量的统计属性会随着时间的推移而变化，通常意味着准招变差，例如金融指标相关预测、交通领域的拥堵预测这种时效性比较强的场景，表现会更明显。
+ 
+`个人理解：原则之间是有依赖路径的，论文中没有详细描述这些原则相互之间的依赖，但是影响不大，可以自己论证出来`
+
+
+## MLOps 的九大技术组件
+
+![](/images/blog_images/mlops/component.png)
+
+|  序号   | 组件名称  | 业界参考  |
+|  :-: | :----------:| :-: |
+|C1|CI/CD Component(CI/CD 组件)|Jenkins、GitHub Actions|
+|C2|Source Code Repository(源代码仓库)|GitHub、GitLab|
+|C3|Workflow Orchestration Component(流程编排组件)|Apache Airflow、Kubeflow pipeline|
+|C4|Feature Store System(特征存储系统)|Google Feast、AWS Feature Store|
+|C5|Model Training Infrastructure(模型训练基础设施,主要指分布式/非分布式的算力基础设施)|k8s|
+|C6|Model Registry(模型仓库)|MLflow、AWS SageMaker Model Registry|
+|C7|ML Metadata Stores(元数据存储)|MLflow、AWS SageMaker Pipelines|
+|C8|Model Serving Component(模型服务组件)|KServing of Kubeflow、TensorFlow Serving|
+|C9|Monitoring Component(监控组件,在线服务的监控+基础设施监控)|Prometheus、Grafana|
+
+`个人疑问：TensorFlow、Pytorch 之类的机器学习框架并没有算在 MLOps 相关技术组件中，是因为这类框架的直接选型和使用是算法工程师的原因？`
+ 
+
+## MLOps 涉及的七种角色
+
+ 
+
+MLOps 包括了7种参与角色
+
+|  序号   | 角色 | 职责描述|
+|  :-: | :----------:| :-: |
+|R1|商业利益相关者(Business Stakeholder)|一般是产品负责人或者项目负责人，负责定义业务目标、和业务方沟通，对外呈现机器学习产品的ROI|
+|R2|解决方案架构师(Solution Architect)|解决方案级的架构设计、技术选型|
+|R3|数据科学家（算法）(Data Scientist)|负责把业务问题翻译成算法问题，关注于算法选型、训练|
+|R4|数据工程师(Data Engineer)|负责管理特征存储系统、构建特征工程的工作流|
+|R5|软件工程师(Software Engineer)|产品级的功能开发|
+|R6|DevOps 工程师(DevOps Engineer)|基础设施和交付产品的运维工作|
+|R7|MLOps 工程师(ML Engineer/MLOps Engineer)|负责包括基础设施、工作流引擎、模型部署和基础设施/模型服务监控系统的建设运维，兼顾多领域知识|
+
+MLOps 工程师所需要的跨领域技能和常见的研发角色的技能领域的交叉图示：
+![](/images/blog_images/mlops/roles.png)
+ 
+## MLOps 的整体架构和流程
+
+`个人理解，核心理念是用技术组件（Technical Components）承载指导原则（Principles）、通过整体架构和工作流（Architecture and Workflow）来完成人员分工（Roles）和技术组件（Technical Components）的串联`
+ 
+|  环节   | 描述 | 
+|  :-: | :----------:| 
+|A|需求沟通讨论和分工|
+|B1|数据定义，定义需要的数据、转换清洗规则、特征工程的规则|
+|B2|数据工程，执行数据相关操作，提取、清洗、特征工程等|
+|C|算法实验，包括数据分析、验证、模型训练、模型评估等|
+|D|自动化ML工作流，对于POC通过的实验，通过自动化工作流进行模型迭代|
+
+![](/images/blog_images/mlops/workflow.png)
+ 
+ 
+## MLOps 落地的挑战
+
+### 组织挑战
+
+* 组织的目标引导上，要从传统的模型驱动转换为产品导向。
+* 组织的完备度上，要保证各种职责角色完备，单一的算法角色是无法完成MLOps目标的。
+### 系统挑战
+
+* MLOps 系统的设计面临的需求是多变的，尤其是训练阶段，由于数据的多样性（结构化、非结构化）和规模性（量级不确定）对训练阶段的资源需求多变，所以系统设计要保证足够的灵活性。
+### 运维挑战
+
+* 存在不同的软硬件技术栈，因此对运维自动化要求较高
+* 重复工作流程的高度自动化，衍生了大量工件(artifacts)，类似版本化管理的数据、代码等，这些都需要进行一定的治理来保障稳定性和可复现性
