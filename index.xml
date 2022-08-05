@@ -6,7 +6,16 @@
     <description>Recent content on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 31 Mar 2022 17:00:51 +0800</lastBuildDate><atom:link href="http://1feng.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 05 Aug 2022 15:02:44 +0800</lastBuildDate><atom:link href="http://1feng.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary</title>
+      <link>http://1feng.github.io/post/2022-08-05-mlops/</link>
+      <pubDate>Fri, 05 Aug 2022 15:02:44 +0800</pubDate>
+      
+      <guid>http://1feng.github.io/post/2022-08-05-mlops/</guid>
+      <description>本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解 Machine Learning Operations (MLOps): Overview, Definition, and Architecture Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl May 2022 背景 作者认为机器学习项目的终极目标是能够把</description>
+    </item>
+    
     <item>
       <title>互联网数据滥用</title>
       <link>http://1feng.github.io/post/2022-03-31-data-abuse/</link>

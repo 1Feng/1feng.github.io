@@ -3,27 +3,41 @@
   
   <url>
     <loc>http://1feng.github.io/</loc>
-    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
+    <lastmod>2022-08-05T15:02:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://1feng.github.io/categories/</loc>
-    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
+    <lastmod>2022-08-05T15:02:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://1feng.github.io/categories/data-protection/</loc>
-    <lastmod>2022-03-31T17:00:51+08:00</lastmod>
+    <loc>http://1feng.github.io/categories/mlops/</loc>
+    <lastmod>2022-08-05T15:02:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://1feng.github.io/post/</loc>
+    <lastmod>2022-08-05T15:02:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2022-08-05-mlops/</loc>
+    <lastmod>2022-08-05T15:02:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/data-protection/</loc>
     <lastmod>2022-03-31T17:00:51+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

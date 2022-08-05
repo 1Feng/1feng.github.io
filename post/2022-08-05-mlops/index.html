@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary - 1Feng&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解 Machine Learning Operations (MLOps): Overview, Definition, and Architecture Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl May 2022 背景 作者认为机器学习项目的终极目标是能够把" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2022-08-05-mlops/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary" />
+<meta property="og:description" content="本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解 Machine Learning Operations (MLOps): Overview, Definition, and Architecture Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl May 2022 背景 作者认为机器学习项目的终极目标是能够把" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2022-08-05-mlops/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-08-05T15:02:44+08:00" />
+<meta property="article:modified_time" content="2022-08-05T15:02:44+08:00" />
+
+<meta itemprop="name" content="《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary">
+<meta itemprop="description" content="本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解 Machine Learning Operations (MLOps): Overview, Definition, and Architecture Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl May 2022 背景 作者认为机器学习项目的终极目标是能够把"><meta itemprop="datePublished" content="2022-08-05T15:02:44+08:00" />
+<meta itemprop="dateModified" content="2022-08-05T15:02:44+08:00" />
+<meta itemprop="wordCount" content="2756">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary"/>
+<meta name="twitter:description" content="本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解 Machine Learning Operations (MLOps): Overview, Definition, and Architecture Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl May 2022 背景 作者认为机器学习项目的终极目标是能够把"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-08-05 </span>
+        <div class="post-category">
+            <a href="/categories/mlops/"> MLOps </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景">背景</a></li>
+    <li><a href="#研究方法">研究方法</a></li>
+    <li><a href="#研究结论">研究结论</a>
+      <ul>
+        <li><a href="#mlops-概念定义">MLOps 概念定义</a></li>
+        <li><a href="#mlops-的九大原则">MLOps 的九大原则</a></li>
+        <li><a href="#mlops-的九大技术组件">MLOps 的九大技术组件</a></li>
+        <li><a href="#mlops-涉及的七种角色">MLOps 涉及的七种角色</a></li>
+        <li><a href="#mlops-的整体架构和流程">MLOps 的整体架构和流程</a></li>
+        <li><a href="#mlops-落地的挑战">MLOps 落地的挑战</a>
+          <ul>
+            <li><a href="#组织挑战">组织挑战</a></li>
+            <li><a href="#系统挑战">系统挑战</a></li>
+            <li><a href="#运维挑战">运维挑战</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解</p>
+<blockquote>
+<p><a href="https://arxiv.org/pdf/2205.02302v3.pdf">Machine Learning Operations (MLOps): Overview, Definition, and Architecture</a></p>
+<p>Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl</p>
+<p>May 2022</p>
+</blockquote>
+<h1 id="背景">背景</h1>
+<p>作者认为机器学习项目的终极目标是能够把算法能力产品化，同时能够在算法层面不断的进行产品迭代。这一目标对应的最大的挑战就是实现 ML 产品的自动化(automate)、可运营化(operationalize)。 MLOPs 这个概念就是为了应对这些挑战而产生的，但是这个概念目前仍然是个模糊不清的术语，专家们的解读也存在分歧。这篇论文的目的就是希望可以体系化的把 MLOps 这个概念弄清楚，从而为领域的研究人员和参与者提供一定的指引。</p>
+<p>业内虽然也存在 MLOps 相关的研究，但是作者们认为 ML 系统设计方面依旧缺少整体的概念化(conceptualization)、泛化(generalization)、清晰化(clarification)的内容。概念讲不清楚、理解不一致会引发 ML 系统落地的一系列的问题，所以尽可能定义清楚这个概念是很有必要的。</p>
+<h1 id="研究方法">研究方法</h1>
+<p>作者花了不少篇幅讲自己的研究方法论，以此来提升结论的可信度，具体研究方法可以一图概括，即通过三种角度的研究来论证产出 MLOps 的体系化（4个维度解读）概念。</p>
+<p><img src="/images/blog_images/mlops/Methodology.png" alt=""></p>
+<p>三种角度的研究方法</p>
+<ul>
+<li>文献调研 (Literature Review)</li>
+<li>工具调研(Tool Review)</li>
+<li>访谈学习(Interview Study)</li>
+</ul>
+<p>四个维度产出</p>
+<ul>
+<li>原则(Principles)</li>
+<li>技术组件(Components)</li>
+<li>人员角色(Roles)</li>
+<li>架构(Architecture)</li>
+</ul>
+<h1 id="研究结论">研究结论</h1>
+<h2 id="mlops-概念定义">MLOps 概念定义</h2>
+<blockquote>
+<p><strong>MLOps (Machine Learning Operations) is a paradigm</strong>,including aspects like best practices, sets of concepts, as well as adevelopment culture when it comes to the end-to-endconceptualization, implementation, monitoring, deployment, andscalability of machine learning products.</p>
+<p><strong>Most of all</strong>, it is anengineering practice that leverages three contributing disciplines:machine learning, software engineering (especially DevOps), anddata engineering. MLOps is aimed at productionizing machinelearning systems by bridging the gap between development (Dev)and operations (Ops).</p>
+<p><strong>Essentially</strong>, MLOps aims to facilitate the creation of machine learning products by leveraging theseprinciples: CI/CD automation, workflow orchestration,reproducibility; versioning of data, model, and code;collaboration; continuous ML training and evaluation; MLmetadata tracking and logging; continuous monitoring; andfeedback loops.</p>
+</blockquote>
+<p><strong>MLOps 是一种范式</strong>，是涉及 ML 产品端到端的从概念构想、实现、监控、部署到可扩展能力的一系列最佳实践、概念集、以及开发文化的一种范式。</p>
+<p><strong>最重要的</strong>，它是涵盖了机器学习、软件工程、数据工程三大贡献学科的工程实践。MLOps 旨在通过弥合开发(Dev)和运营(Ops)之间的差距，促使机器学习系统产品化。</p>
+<p><strong>本质上</strong>，MLOps 旨在利用一系列的原则（9大原则）来促进 ML 产品创造创新。</p>
+<h2 id="mlops-的九大原则">MLOps 的九大原则</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">原则</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">P1</td>
+<td style="text-align:center">CI/CD automation</td>
+<td style="text-align:center">就是常规的自动化CI/CD理念</td>
+</tr>
+<tr>
+<td style="text-align:center">P2</td>
+<td style="text-align:center">Workflow orchestration(工作流编排)</td>
+<td style="text-align:center">任务执行的顺序和依赖关系，一般通过Workflow Pipeline的方式利用DAG（有向无环图）实现</td>
+</tr>
+<tr>
+<td style="text-align:center">P3</td>
+<td style="text-align:center">Reproducibility(可复现性)</td>
+<td style="text-align:center">算法实验有能力复现</td>
+</tr>
+<tr>
+<td style="text-align:center">P4</td>
+<td style="text-align:center">Versioning(版本化)</td>
+<td style="text-align:center">数据、模型、代码、流程都要版本化，从而支撑P3和P7</td>
+</tr>
+<tr>
+<td style="text-align:center">P5</td>
+<td style="text-align:center">Collaboration(协同)</td>
+<td style="text-align:center">基于数据、模型、代码的跨领域多角色的协同工作，既是一种能力，也代表一种被提倡的文化（减少领域孤岛）</td>
+</tr>
+<tr>
+<td style="text-align:center">P6</td>
+<td style="text-align:center">Continuous ML training &amp; evaluation(持续训练&amp;评估)</td>
+<td style="text-align:center">能够基于监控体系、回环体系、自动化的workflow来周期性基于新数据重新训练和评估</td>
+</tr>
+<tr>
+<td style="text-align:center">P7</td>
+<td style="text-align:center">ML metadata tracking/logging(元数据追踪/记录)</td>
+<td style="text-align:center">所有编排的workflow任务都能被记录和追踪，既包括任务也包括模型</td>
+</tr>
+<tr>
+<td style="text-align:center">P8</td>
+<td style="text-align:center">Continuous monitoring(持续监控)</td>
+<td style="text-align:center">既包括系统层面，也包括算法指标层面（可以规避类似「concept drift」问题）</td>
+</tr>
+<tr>
+<td style="text-align:center">P9</td>
+<td style="text-align:center">Feedback loops(反馈回环)</td>
+<td style="text-align:center">线上反馈回环/研发过程中评估反馈回环</td>
+</tr>
+</tbody>
+</table>
+<p><strong>「concept drift」 指</strong>：模型试图预测的目标变量的统计属性会随着时间的推移而变化，通常意味着准招变差，例如金融指标相关预测、交通领域的拥堵预测这种时效性比较强的场景，表现会更明显。</p>
+<p><code>个人理解：原则之间是有依赖路径的，论文中没有详细描述这些原则相互之间的依赖，但是影响不大，可以自己论证出来</code></p>
+<h2 id="mlops-的九大技术组件">MLOps 的九大技术组件</h2>
+<p><img src="/images/blog_images/mlops/component.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">组件名称</th>
+<th style="text-align:center">业界参考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">C1</td>
+<td style="text-align:center">CI/CD Component(CI/CD 组件)</td>
+<td style="text-align:center">Jenkins、GitHub Actions</td>
+</tr>
+<tr>
+<td style="text-align:center">C2</td>
+<td style="text-align:center">Source Code Repository(源代码仓库)</td>
+<td style="text-align:center">GitHub、GitLab</td>
+</tr>
+<tr>
+<td style="text-align:center">C3</td>
+<td style="text-align:center">Workflow Orchestration Component(流程编排组件)</td>
+<td style="text-align:center">Apache Airflow、Kubeflow pipeline</td>
+</tr>
+<tr>
+<td style="text-align:center">C4</td>
+<td style="text-align:center">Feature Store System(特征存储系统)</td>
+<td style="text-align:center">Google Feast、AWS Feature Store</td>
+</tr>
+<tr>
+<td style="text-align:center">C5</td>
+<td style="text-align:center">Model Training Infrastructure(模型训练基础设施,主要指分布式/非分布式的算力基础设施)</td>
+<td style="text-align:center">k8s</td>
+</tr>
+<tr>
+<td style="text-align:center">C6</td>
+<td style="text-align:center">Model Registry(模型仓库)</td>
+<td style="text-align:center">MLflow、AWS SageMaker Model Registry</td>
+</tr>
+<tr>
+<td style="text-align:center">C7</td>
+<td style="text-align:center">ML Metadata Stores(元数据存储)</td>
+<td style="text-align:center">MLflow、AWS SageMaker Pipelines</td>
+</tr>
+<tr>
+<td style="text-align:center">C8</td>
+<td style="text-align:center">Model Serving Component(模型服务组件)</td>
+<td style="text-align:center">KServing of Kubeflow、TensorFlow Serving</td>
+</tr>
+<tr>
+<td style="text-align:center">C9</td>
+<td style="text-align:center">Monitoring Component(监控组件,在线服务的监控+基础设施监控)</td>
+<td style="text-align:center">Prometheus、Grafana</td>
+</tr>
+</tbody>
+</table>
+<p><code>个人疑问：TensorFlow、Pytorch 之类的机器学习框架并没有算在 MLOps 相关技术组件中，是因为这类框架的直接选型和使用是算法工程师的原因？</code></p>
+<h2 id="mlops-涉及的七种角色">MLOps 涉及的七种角色</h2>
+<p>MLOps 包括了7种参与角色</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">角色</th>
+<th style="text-align:center">职责描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">R1</td>
+<td style="text-align:center">商业利益相关者(Business Stakeholder)</td>
+<td style="text-align:center">一般是产品负责人或者项目负责人，负责定义业务目标、和业务方沟通，对外呈现机器学习产品的ROI</td>
+</tr>
+<tr>
+<td style="text-align:center">R2</td>
+<td style="text-align:center">解决方案架构师(Solution Architect)</td>
+<td style="text-align:center">解决方案级的架构设计、技术选型</td>
+</tr>
+<tr>
+<td style="text-align:center">R3</td>
+<td style="text-align:center">数据科学家（算法）(Data Scientist)</td>
+<td style="text-align:center">负责把业务问题翻译成算法问题，关注于算法选型、训练</td>
+</tr>
+<tr>
+<td style="text-align:center">R4</td>
+<td style="text-align:center">数据工程师(Data Engineer)</td>
+<td style="text-align:center">负责管理特征存储系统、构建特征工程的工作流</td>
+</tr>
+<tr>
+<td style="text-align:center">R5</td>
+<td style="text-align:center">软件工程师(Software Engineer)</td>
+<td style="text-align:center">产品级的功能开发</td>
+</tr>
+<tr>
+<td style="text-align:center">R6</td>
+<td style="text-align:center">DevOps 工程师(DevOps Engineer)</td>
+<td style="text-align:center">基础设施和交付产品的运维工作</td>
+</tr>
+<tr>
+<td style="text-align:center">R7</td>
+<td style="text-align:center">MLOps 工程师(ML Engineer/MLOps Engineer)</td>
+<td style="text-align:center">负责包括基础设施、工作流引擎、模型部署和基础设施/模型服务监控系统的建设运维，兼顾多领域知识</td>
+</tr>
+</tbody>
+</table>
+<p>MLOps 工程师所需要的跨领域技能和常见的研发角色的技能领域的交叉图示：
+<img src="/images/blog_images/mlops/roles.png" alt=""></p>
+<h2 id="mlops-的整体架构和流程">MLOps 的整体架构和流程</h2>
+<p><code>个人理解，核心理念是用技术组件（Technical Components）承载指导原则（Principles）、通过整体架构和工作流（Architecture and Workflow）来完成人员分工（Roles）和技术组件（Technical Components）的串联</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">环节</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center">需求沟通讨论和分工</td>
+</tr>
+<tr>
+<td style="text-align:center">B1</td>
+<td style="text-align:center">数据定义，定义需要的数据、转换清洗规则、特征工程的规则</td>
+</tr>
+<tr>
+<td style="text-align:center">B2</td>
+<td style="text-align:center">数据工程，执行数据相关操作，提取、清洗、特征工程等</td>
+</tr>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">算法实验，包括数据分析、验证、模型训练、模型评估等</td>
+</tr>
+<tr>
+<td style="text-align:center">D</td>
+<td style="text-align:center">自动化ML工作流，对于POC通过的实验，通过自动化工作流进行模型迭代</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/images/blog_images/mlops/workflow.png" alt=""></p>
+<h2 id="mlops-落地的挑战">MLOps 落地的挑战</h2>
+<h3 id="组织挑战">组织挑战</h3>
+<ul>
+<li>组织的目标引导上，要从传统的模型驱动转换为产品导向。</li>
+<li>组织的完备度上，要保证各种职责角色完备，单一的算法角色是无法完成MLOps目标的。</li>
+</ul>
+<h3 id="系统挑战">系统挑战</h3>
+<ul>
+<li>MLOps 系统的设计面临的需求是多变的，尤其是训练阶段，由于数据的多样性（结构化、非结构化）和规模性（量级不确定）对训练阶段的资源需求多变，所以系统设计要保证足够的灵活性。</li>
+</ul>
+<h3 id="运维挑战">运维挑战</h3>
+<ul>
+<li>存在不同的软硬件技术栈，因此对运维自动化要求较高</li>
+<li>重复工作流程的高度自动化，衍生了大量工件(artifacts)，类似版本化管理的数据、代码等，这些都需要进行一定的治理来保障稳定性和可复现性</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-08-05
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/2022-03-31-data-abuse/">
+            <span class="next-text nav-default">互联网数据滥用</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1@foxmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
