@@ -1,5 +1,5 @@
 ---
-title: "Process and Rule"
+title: "组织管理中流程规则的利弊"
 date: 2024-02-02T11:47:02+08:00
 categories:
     - 管理 
@@ -28,20 +28,33 @@ categories:
 近期正好又翻阅到[《Netflix culture: freedom & responsibility》](https://igormroz.com/documents/netflix_culture.pdf), 里面对此有精彩的分析：
 
 ![](/images/blog_images/process_and_rule/01.png)
- 公司的增长
+
+ 公司都渴望不断成长做大，但是成长会增加公司的复杂度，成长也会稀释人才密度
 
 ![](/images/blog_images/process_and_rule/02.png)
 
+问题开始出现，业务变得过于发展，已经无法在现有人才密度上正常运转
+
 ![](/images/blog_images/process_and_rule/03.png)
+
+没人喜欢流程，但是和混乱带来的痛苦相比，流程让人感觉更好些
 
 ![](/images/blog_images/process_and_rule/04.png)
 
+强调流程，导致人才流失
+
 ![](/images/blog_images/process_and_rule/05.png)
+
+流程会让员工更着眼于短期结果
 
 ![](/images/blog_images/process_and_rule/06.png)
 
+一旦市场发生变化，后果不堪设想
+
 
 # 我的理解
-- 公司所处的阶段决定了流程规则对公司的实际价值，优劣不可一概而论。
+
+
+- 公司所处的阶段决定了流程规则对公司的实际价值，这是个利弊问题，不是个对错问题
 - 行业和市场环境决定了公司是否需要追求灵活克服规则的重力。例如行业下行期中的国企会因其集体决策机制（效率低）而保持相对稳健，更能抵御风险，这种情况就没必要追求灵活。
 - 公司的经营情况决定了组织是否有能力去克服规则的重力，因为优秀人才密度的提升需要大量资金投入。
