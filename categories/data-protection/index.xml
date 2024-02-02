@@ -6,15 +6,14 @@
     <description>Recent content in data protection on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 31 Mar 2022 17:00:51 +0800</lastBuildDate><atom:link href="http://1feng.github.io/categories/data-protection/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 31 Mar 2022 17:00:51 +0800</lastBuildDate>
+    <atom:link href="http://1feng.github.io/categories/data-protection/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>互联网数据滥用</title>
       <link>http://1feng.github.io/post/2022-03-31-data-abuse/</link>
       <pubDate>Thu, 31 Mar 2022 17:00:51 +0800</pubDate>
-      
       <guid>http://1feng.github.io/post/2022-03-31-data-abuse/</guid>
       <description>数据泄露可以造成的风险大家普遍还是概念比较清晰的。目前监管除了要求数据具备保密性之外，对数据的经营性滥用也有各种要求，那滥用究竟意味着什么呢</description>
     </item>
-    
   </channel>
 </rss>

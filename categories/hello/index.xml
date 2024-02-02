@@ -6,18 +6,14 @@
     <description>Recent content in hello on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 27 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="http://1feng.github.io/categories/hello/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 27 Apr 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://1feng.github.io/categories/hello/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>hello world</title>
       <link>http://1feng.github.io/post/2014-04-27-hello-world/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2014-04-27-hello-world/</guid>
-      <description>hello world
-hello world
-hello world
-hello world</description>
+      <description>hello world&#xA;hello world&#xA;hello world&#xA;hello world</description>
     </item>
-    
   </channel>
 </rss>

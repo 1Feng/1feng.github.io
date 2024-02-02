@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+<meta name="generator" content="Hugo 0.122.0 with theme even" />
 
 
 <link rel="canonical" href="http://1feng.github.io/post/2016-07-20-signal-with-mutex-locked-or-not/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -50,8 +50,7 @@
 <meta itemprop="description" content="原文链接 介绍 当我们使用条件变量的时候，总有这样一个问题：到底该在解锁mutex之前进行sinal/broadcast，还是在之后？ 什么时候进"><meta itemprop="datePublished" content="2016-07-20T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2016-07-20T00:00:00+00:00" />
 <meta itemprop="wordCount" content="4315">
-<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Signal with mutex locked or not(译)"/>
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Signal with mutex locked or not(译)"/>
 <meta name="twitter:description" content="原文链接 介绍 当我们使用条件变量的时候，总有这样一个问题：到底该在解锁mutex之前进行sinal/broadcast，还是在之后？ 什么时候进"/>
 
 <!--[if lte IE 9]>
@@ -171,10 +170,10 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="n">predicate</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="n">pthread_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cv</span><span class="p">);</span>    <span class="c1">// OR: pthread_mutex_unlock(&amp;mutex);
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span> <span class="c1">//  : pthread_cond_signal(&amp;cv);
+</span></span><span class="line"><span class="cl"><span class="nf">pthread_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cv</span><span class="p">);</span>    <span class="c1">// OR: pthread_mutex_unlock(&amp;mutex);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mutex</span><span class="p">);</span> <span class="c1">//  : pthread_cond_signal(&amp;cv);
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="权威解答">权威解答</h2>
@@ -314,7 +313,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
 
 
 

@@ -6,105 +6,91 @@
     <description>Recent content in Categories on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 05 Aug 2022 15:02:44 +0800</lastBuildDate><atom:link href="http://1feng.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Feb 2024 11:47:02 +0800</lastBuildDate>
+    <atom:link href="http://1feng.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>管理</title>
+      <link>http://1feng.github.io/categories/%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Fri, 02 Feb 2024 11:47:02 +0800</pubDate>
+      <guid>http://1feng.github.io/categories/%E7%AE%A1%E7%90%86/</guid>
+      <description></description>
+    </item>
     <item>
       <title>MLOps</title>
       <link>http://1feng.github.io/categories/mlops/</link>
       <pubDate>Fri, 05 Aug 2022 15:02:44 +0800</pubDate>
-      
       <guid>http://1feng.github.io/categories/mlops/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>data protection</title>
       <link>http://1feng.github.io/categories/data-protection/</link>
       <pubDate>Thu, 31 Mar 2022 17:00:51 +0800</pubDate>
-      
       <guid>http://1feng.github.io/categories/data-protection/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>distribute</title>
       <link>http://1feng.github.io/categories/distribute/</link>
       <pubDate>Fri, 16 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/distribute/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>system</title>
       <link>http://1feng.github.io/categories/system/</link>
       <pubDate>Fri, 16 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/system/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>leveldb</title>
       <link>http://1feng.github.io/categories/leveldb/</link>
       <pubDate>Sat, 10 Sep 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/leveldb/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>concurrency</title>
       <link>http://1feng.github.io/categories/concurrency/</link>
       <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/concurrency/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>linux</title>
       <link>http://1feng.github.io/categories/linux/</link>
       <pubDate>Thu, 05 May 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/linux/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>daemon</title>
       <link>http://1feng.github.io/categories/daemon/</link>
       <pubDate>Sat, 29 Nov 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/daemon/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cpp</title>
       <link>http://1feng.github.io/categories/cpp/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/cpp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>hello</title>
       <link>http://1feng.github.io/categories/hello/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/hello/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>std::bind</title>
       <link>http://1feng.github.io/categories/stdbind/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/categories/stdbind/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

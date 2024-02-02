@@ -6,15 +6,14 @@
     <description>Recent content in cpp on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 27 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="http://1feng.github.io/categories/cpp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 27 Apr 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://1feng.github.io/categories/cpp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>函数对象与std::bind</title>
       <link>http://1feng.github.io/post/2014-04-27-std-bind-in-c-plus-plus/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2014-04-27-std-bind-in-c-plus-plus/</guid>
       <description>函数指针 主要有以下两类： 一般函数指针（普通函数指针 and static 成员函数指针） 非static成员函数指针 一般函数指针 初始化 普通函数指针 func_type func = function_name; or func_type func =</description>
     </item>
-    
   </channel>
 </rss>

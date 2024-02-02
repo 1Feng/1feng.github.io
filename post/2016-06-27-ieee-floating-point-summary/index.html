@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.96.0-DEV with theme even" />
+<meta name="generator" content="Hugo 0.122.0 with theme even" />
 
 
 <link rel="canonical" href="http://1feng.github.io/post/2016-06-27-ieee-floating-point-summary/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.b5a744db6de49a86cadafb3b70f555ab443f83c307a483402259e94726b045ff.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -49,9 +49,8 @@
 <meta itemprop="name" content="浮点数问题探究">
 <meta itemprop="description" content="问题 最近在使用openresty实现一些业务，业务中设计了一套二进制编码，目前为49bit。真正实现的时候发现lua里不支持(u)int64"><meta itemprop="datePublished" content="2016-06-27T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2016-06-27T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2363">
-<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="浮点数问题探究"/>
+<meta itemprop="wordCount" content="2366">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="浮点数问题探究"/>
 <meta name="twitter:description" content="问题 最近在使用openresty实现一些业务，业务中设计了一套二进制编码，目前为49bit。真正实现的时候发现lua里不支持(u)int64"/>
 
 <!--[if lte IE 9]>
@@ -234,20 +233,20 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;lualib.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">tostring</span><span class="p">(</span><span class="n">lua_State</span><span class="o">*</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">lua_gettop</span><span class="p">(</span><span class="n">l</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="nf">lua_gettop</span><span class="p">(</span><span class="n">l</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">a</span> <span class="o">=</span> <span class="n">lua_tonumber</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">b</span> <span class="o">=</span> <span class="n">lua_tonumber</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">a</span> <span class="o">=</span> <span class="nf">lua_tonumber</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">b</span> <span class="o">=</span> <span class="nf">lua_tonumber</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">//printf(&#34;%&#34;PRIu64&#34; %&#34;PRIu64&#34;\n&#34;, a, b);
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">//printf(&#34;%&#34;PRIX64&#34; %&#34;PRIX64&#34;\n&#34;, a, b);
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">65</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">16</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">&#34;%&#34;</span><span class="n">PRIx64</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">lua_pushstring</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">&#34;%&#34;</span><span class="n">PRIx64</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">lua_pushstring</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">&#34;%&#34;</span><span class="n">PRIu64</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">lua_pushstring</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">&#34;%&#34;</span><span class="n">PRIu64</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">lua_pushstring</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="kt">uint64_t</span> <span class="n">mask</span> <span class="o">=</span> <span class="mh">0x8000000000000000ULL</span><span class="p">;</span>
@@ -266,7 +265,7 @@
 </span></span><span class="line"><span class="cl">                <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">            <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="n">lua_pushstring</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">lua_pushstring</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -284,7 +283,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">luaopen_bitop</span><span class="p">(</span><span class="n">lua_State</span><span class="o">*</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">luaL_register</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="s">&#34;bitop&#34;</span><span class="p">,</span> <span class="n">lib</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">luaL_register</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="s">&#34;bitop&#34;</span><span class="p">,</span> <span class="n">lib</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="c1">// gcc bitop.c -std=c99 -I/usr/local/luajit/include/luajit-2.1 -fPIC -shared -o bitop.so
@@ -547,7 +546,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
 
 
 

@@ -6,51 +6,42 @@
     <description>Recent content in leveldb on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 10 Sep 2016 00:00:00 +0000</lastBuildDate><atom:link href="http://1feng.github.io/categories/leveldb/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 10 Sep 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://1feng.github.io/categories/leveldb/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>leveldb 源码笔记之 Read</title>
       <link>http://1feng.github.io/post/2016-09-10-leveldb-read/</link>
       <pubDate>Sat, 10 Sep 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-09-10-leveldb-read/</guid>
       <description>key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 Compact</title>
       <link>http://1feng.github.io/post/2016-09-06-leveldb-compact/</link>
       <pubDate>Tue, 06 Sep 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-09-06-leveldb-compact/</guid>
       <description>简介 leveldb中只有minor compaction 和 major compaction两种 代码中通过调用DBImpl::MaybeScheduleCompaction</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 MVCC &amp;&amp; Manifest</title>
       <link>http://1feng.github.io/post/2016-08-24-mvcc-and-manifest/</link>
       <pubDate>Wed, 24 Aug 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-08-24-mvcc-and-manifest/</guid>
       <description>MVCC 问题: 针对同一条记录，如果读和写在同一时间发生时，reader可能会读取到不一致或者写了一半的数据 常见解决方案 悲观锁： 最简单的方式,即通过</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 sstable</title>
       <link>http://1feng.github.io/post/2016-08-22-sstable-summary/</link>
       <pubDate>Mon, 22 Aug 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-08-22-sstable-summary/</guid>
       <description>sstable 组成细节 如下： sstalbe 生成流程 sstable 生成时机: minor compaction immutable-memtable 中的key/value dump到磁盘，生成sstable major compaction sstable compact（level-n ss</description>
     </item>
-    
     <item>
       <title>leveldb源码笔记之 Write</title>
       <link>http://1feng.github.io/post/2016-08-18-leveldb-write/</link>
       <pubDate>Thu, 18 Aug 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-08-18-leveldb-write/</guid>
       <description>插入一条K/V记录 持有Writer的线程进入Writers队列,细节如下： MakeRoomForWrite的流程图： 记录会首先写入磁盘上的b</description>
     </item>
-    
   </channel>
 </rss>

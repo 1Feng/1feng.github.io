@@ -6,261 +6,210 @@
     <description>Recent content in Posts on 1Feng&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 05 Aug 2022 15:02:44 +0800</lastBuildDate><atom:link href="http://1feng.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Feb 2024 11:47:02 +0800</lastBuildDate>
+    <atom:link href="http://1feng.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Process and Rule</title>
+      <link>http://1feng.github.io/post/process-and-rule/</link>
+      <pubDate>Fri, 02 Feb 2024 11:47:02 +0800</pubDate>
+      <guid>http://1feng.github.io/post/process-and-rule/</guid>
+      <description>字节的观点 最近读到腾讯深网关于字节的一篇报道，里面提到到了字节高层对组织管理流程规则的看法，整体偏负向。 张一鸣早在2016年就公开表达过自己</description>
+    </item>
     <item>
       <title>《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary</title>
       <link>http://1feng.github.io/post/2022-08-05-mlops/</link>
       <pubDate>Fri, 05 Aug 2022 15:02:44 +0800</pubDate>
-      
       <guid>http://1feng.github.io/post/2022-08-05-mlops/</guid>
       <description>本文主要是针对以下论文的简要解读，其中掺杂了一些的个人理解 Machine Learning Operations (MLOps): Overview, Definition, and Architecture Dominik Kreuzberger, Niklas Kühl, Sebastian Hirschl May 2022 背景 作者认为机器学习项目的终极目标是能够把</description>
     </item>
-    
     <item>
       <title>互联网数据滥用</title>
       <link>http://1feng.github.io/post/2022-03-31-data-abuse/</link>
       <pubDate>Thu, 31 Mar 2022 17:00:51 +0800</pubDate>
-      
       <guid>http://1feng.github.io/post/2022-03-31-data-abuse/</guid>
       <description>数据泄露可以造成的风险大家普遍还是概念比较清晰的。目前监管除了要求数据具备保密性之外，对数据的经营性滥用也有各种要求，那滥用究竟意味着什么呢</description>
     </item>
-    
     <item>
       <title>Read-Only 的 linearizability</title>
       <link>http://1feng.github.io/post/2017-06-16-smarter/</link>
       <pubDate>Fri, 16 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-16-smarter/</guid>
       <description>《Paxos Replicated State Machines as the Basis of a High-Performance Data Store》 介绍了使用了paxos算法进行副本同步，这里仅总结如何保证read-only操作的lineari</description>
     </item>
-    
     <item>
       <title>线性一致性</title>
       <link>http://1feng.github.io/post/2017-06-15-linearizability/</link>
       <pubDate>Thu, 15 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-15-linearizability/</guid>
       <description>Introduce 所谓的linearizability其目的在于描述系统的数据，对外看起来就像只有一份，所有针对这部分数据的操作都是原子(Concurren</description>
     </item>
-    
     <item>
       <title>弱一致性</title>
       <link>http://1feng.github.io/post/2017-06-14-weak-consistency/</link>
       <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-14-weak-consistency/</guid>
       <description>Introduce 对于CAP而言，partition-tolerant是客观的必须要做的，不然不能称之为分布式系统；而consistent和availabl</description>
     </item>
-    
     <item>
       <title>zab 算法总结</title>
       <link>http://1feng.github.io/post/2017-06-13-zab/</link>
       <pubDate>Tue, 13 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-13-zab/</guid>
       <description>Summary zab是Yahoo提出的leader-base的一致性协议，由于raft晚于该协议猜测raft中有借鉴该协议的一些思想 此文仅总结理解的一些</description>
     </item>
-    
     <item>
       <title>Paxos made simple</title>
       <link>http://1feng.github.io/post/2017-06-12-paxos-made-simple/</link>
       <pubDate>Mon, 12 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-12-paxos-made-simple/</guid>
       <description>Summary paxos算法的的核心思想是“与其预测未来，不如限制当下”，即通过保证当前的操作，来一步一步达到预期 Theory 要求 Safety: 只有一个被提议的value被选</description>
     </item>
-    
     <item>
       <title>三阶段提交</title>
       <link>http://1feng.github.io/post/2017-06-11-3pc/</link>
       <pubDate>Sun, 11 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-11-3pc/</guid>
       <description>Why 1983年由Dale Skeen 和 Michael Stonebraker提出了3PC协议来解决2PC阻塞的问题 #What 3PC（two-phase-commit）其实就是</description>
     </item>
-    
     <item>
       <title>两阶段提交</title>
       <link>http://1feng.github.io/post/2017-06-10-2pc/</link>
       <pubDate>Sat, 10 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-10-2pc/</guid>
       <description>Why 针对数据库事务ACID-Atomicity，单机可以使用write-ahead-log实现1PC（one-phase-commit）即可，</description>
     </item>
-    
     <item>
       <title>分布式系统的正确性</title>
       <link>http://1feng.github.io/post/2017-06-09-correctness/</link>
       <pubDate>Fri, 09 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-09-correctness/</guid>
       <description>Introduce 一般正确性的证明标准有两个，分别是safety properties 和 liveness properites Safety Properites 通常safety properites是指：“bad things never happen”。 举例 例如互</description>
     </item>
-    
     <item>
       <title>CAP 问题</title>
       <link>http://1feng.github.io/post/2017-06-08-cap/</link>
       <pubDate>Thu, 08 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-08-cap/</guid>
       <description>Introduce 于2002年提出的CAP理论（三选二的方式来评估分布式系统）确实为分布式系统领域的发展提供了指导价值，但是就今天而言，这套理论已经意义微小</description>
     </item>
-    
     <item>
       <title>What is ACID</title>
       <link>http://1feng.github.io/post/2017-06-07-acid/</link>
       <pubDate>Wed, 07 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-07-acid/</guid>
       <description>What Atomicity 描述： 一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务</description>
     </item>
-    
     <item>
       <title>Unreliable Network</title>
       <link>http://1feng.github.io/post/2017-06-06-unreliable-network/</link>
       <pubDate>Tue, 06 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-06-unreliable-network/</guid>
       <description>Introduce 众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点： 发送方无法确定接收方已经收到请求 发送方</description>
     </item>
-    
     <item>
       <title>Timing and Order</title>
       <link>http://1feng.github.io/post/2017-06-05-timing-and-order/</link>
       <pubDate>Mon, 05 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-05-timing-and-order/</guid>
       <description>Introduce 分布式环境面临的两个主要的问题就是网络不可靠和时钟不可靠，这里主要总结时钟问题 Physical Clocks 我们日常使用的计算机和服务器的物理时钟都是使用的石英(q</description>
     </item>
-    
     <item>
       <title>Vector clock summary</title>
       <link>http://1feng.github.io/post/2017-06-05-vector-clock/</link>
       <pubDate>Mon, 05 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-05-vector-clock/</guid>
       <description>Happend before 用→来表示hanppend before，对于任意event a, b 有： 如果a和b属于同一个process，并且a comes before b, 则 a → b 如果a是某个p</description>
     </item>
-    
     <item>
       <title>《Time, clocks, and the ordering of events in a distributed system》summary</title>
       <link>http://1feng.github.io/post/2017-06-03-time-clocks-and-the-ordering-of-events-in-a-distributed-system/</link>
       <pubDate>Sat, 03 Jun 2017 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2017-06-03-time-clocks-and-the-ordering-of-events-in-a-distributed-system/</guid>
       <description>Happend before 用→来表示hanppend before，对于任意event a, b 有： 如果a和b属于同一个process，并且a comes before b, 则 a → b 如果a是某个p</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 Read</title>
       <link>http://1feng.github.io/post/2016-09-10-leveldb-read/</link>
       <pubDate>Sat, 10 Sep 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-09-10-leveldb-read/</guid>
       <description>key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 Compact</title>
       <link>http://1feng.github.io/post/2016-09-06-leveldb-compact/</link>
       <pubDate>Tue, 06 Sep 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-09-06-leveldb-compact/</guid>
       <description>简介 leveldb中只有minor compaction 和 major compaction两种 代码中通过调用DBImpl::MaybeScheduleCompaction</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 MVCC &amp;&amp; Manifest</title>
       <link>http://1feng.github.io/post/2016-08-24-mvcc-and-manifest/</link>
       <pubDate>Wed, 24 Aug 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-08-24-mvcc-and-manifest/</guid>
       <description>MVCC 问题: 针对同一条记录，如果读和写在同一时间发生时，reader可能会读取到不一致或者写了一半的数据 常见解决方案 悲观锁： 最简单的方式,即通过</description>
     </item>
-    
     <item>
       <title>leveldb 源码笔记之 sstable</title>
       <link>http://1feng.github.io/post/2016-08-22-sstable-summary/</link>
       <pubDate>Mon, 22 Aug 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-08-22-sstable-summary/</guid>
       <description>sstable 组成细节 如下： sstalbe 生成流程 sstable 生成时机: minor compaction immutable-memtable 中的key/value dump到磁盘，生成sstable major compaction sstable compact（level-n ss</description>
     </item>
-    
     <item>
       <title>leveldb源码笔记之 Write</title>
       <link>http://1feng.github.io/post/2016-08-18-leveldb-write/</link>
       <pubDate>Thu, 18 Aug 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-08-18-leveldb-write/</guid>
       <description>插入一条K/V记录 持有Writer的线程进入Writers队列,细节如下： MakeRoomForWrite的流程图： 记录会首先写入磁盘上的b</description>
     </item>
-    
     <item>
       <title>Signal with mutex locked or not(译)</title>
       <link>http://1feng.github.io/post/2016-07-20-signal-with-mutex-locked-or-not/</link>
       <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-07-20-signal-with-mutex-locked-or-not/</guid>
       <description>原文链接 介绍 当我们使用条件变量的时候，总有这样一个问题：到底该在解锁mutex之前进行sinal/broadcast，还是在之后？ 什么时候进</description>
     </item>
-    
     <item>
       <title>Google File System 笔记</title>
       <link>http://1feng.github.io/post/2016-07-08-google-file-system-summary/</link>
       <pubDate>Fri, 08 Jul 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-07-08-google-file-system-summary/</guid>
       <description>创新点 把组件故障当做常态，而不是异常。即，要有完备的监控，错误检测，故障恢复机制 通常文件都是巨大的，数以GB是常态 多数文件的修改是追加新数据</description>
     </item>
-    
     <item>
       <title>浮点数问题探究</title>
       <link>http://1feng.github.io/post/2016-06-27-ieee-floating-point-summary/</link>
       <pubDate>Mon, 27 Jun 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-06-27-ieee-floating-point-summary/</guid>
       <description>问题 最近在使用openresty实现一些业务，业务中设计了一套二进制编码，目前为49bit。真正实现的时候发现lua里不支持(u)int64</description>
     </item>
-    
     <item>
       <title>Linux cpu load</title>
       <link>http://1feng.github.io/post/2016-05-05-linux-cpu-load/</link>
       <pubDate>Thu, 05 May 2016 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2016-05-05-linux-cpu-load/</guid>
       <description>简析 工作一直是在linux环境下，经常通过top，uptime来查看当前机器的负载（load average）, 但是始终对这个概念比较模糊，无</description>
     </item>
-    
     <item>
       <title>如何实现一个 daemon</title>
       <link>http://1feng.github.io/post/2014-11-29-daemon-ho-to/</link>
       <pubDate>Sat, 29 Nov 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2014-11-29-daemon-ho-to/</guid>
       <description>Linux下经常需要将服务程序实现为daemon（守护进程）。从而完成后台运行，开机启动，关机正常结束的功能。 需求 后台运行 ：摆脱tty控制 根</description>
     </item>
-    
     <item>
       <title>hello world</title>
       <link>http://1feng.github.io/post/2014-04-27-hello-world/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2014-04-27-hello-world/</guid>
-      <description>hello world
-hello world
-hello world
-hello world</description>
+      <description>hello world&#xA;hello world&#xA;hello world&#xA;hello world</description>
     </item>
-    
     <item>
       <title>函数对象与std::bind</title>
       <link>http://1feng.github.io/post/2014-04-27-std-bind-in-c-plus-plus/</link>
       <pubDate>Sun, 27 Apr 2014 00:00:00 +0000</pubDate>
-      
       <guid>http://1feng.github.io/post/2014-04-27-std-bind-in-c-plus-plus/</guid>
       <description>函数指针 主要有以下两类： 一般函数指针（普通函数指针 and static 成员函数指针） 非static成员函数指针 一般函数指针 初始化 普通函数指针 func_type func = function_name; or func_type func =</description>
     </item>
-    
   </channel>
 </rss>
