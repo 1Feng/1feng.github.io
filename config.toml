@@ -183,7 +183,7 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
     alipay = "/path/to/your/alipay-qr-code.png"           # 支付宝二维码
 
   [params.social]                                         # 社交链接
-    a-email = "mailto:erenno1@foxmail.com"
+    a-email = "mailto:erenno1.jiang@gmail.com"
     g-github = "https://github.com/1Feng"
     j-douban = "https://book.douban.com/people/Erenno1/collect"
 
