@@ -2,7 +2,7 @@
 baseURL = "http://1feng.github.io/"
 languageCode = "en"
 defaultContentLanguage = "zh-cn"                             # en / zh-cn / ... (This field determines which i18n file to use)
-title = "1Feng's Blog"
+title = "1Feng 的技术文章"
 preserveTaxonomyNames = true
 enableRobotsTXT = true
 enableEmoji = true
