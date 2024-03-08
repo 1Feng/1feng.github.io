@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>concurrency on 1Feng&#39;s Blog</title>
+    <title>concurrency on 1Feng 的技术文章</title>
     <link>http://1feng.github.io/categories/concurrency/</link>
-    <description>Recent content in concurrency on 1Feng&#39;s Blog</description>
+    <description>Recent content in concurrency on 1Feng 的技术文章</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 20 Jul 2016 00:00:00 +0000</lastBuildDate>
