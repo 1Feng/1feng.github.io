@@ -30,8 +30,36 @@
   </url>
   
   <url>
-    <loc>http://1feng.github.io/post/process-and-rule/</loc>
+    <loc>http://1feng.github.io/post/2034-02-02-process-and-rule/</loc>
     <lastmod>2024-02-02T11:47:02+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/categories/ai/</loc>
+    <lastmod>2023-05-20T20:12:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2023-05-01-sam-and-visual-prompting/</loc>
+    <lastmod>2023-05-20T20:12:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2023-05-01-prompt-engineering/</loc>
+    <lastmod>2023-05-01T18:57:45+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://1feng.github.io/post/2023-05-01-data-centric-ai/</loc>
+    <lastmod>2023-05-01T18:50:45+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

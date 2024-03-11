@@ -121,6 +121,74 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/2016-09-10-leveldb-read/">leveldb 源码笔记之 Read</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2016-09-10 </span>
+      <div class="post-category">
+          <a href="/categories/distribute/"> distribute </a>
+          <a href="/categories/system/"> system </a>
+          <a href="/categories/leveldb/"> leveldb </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实
+    </div>
+    <div class="read-more">
+      <a href="/post/2016-09-10-leveldb-read/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/2016-09-06-leveldb-compact/">leveldb 源码笔记之 Compact</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2016-09-06 </span>
+      <div class="post-category">
+          <a href="/categories/distribute/"> distribute </a>
+          <a href="/categories/leveldb/"> leveldb </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      简介 leveldb中只有minor compaction 和 major compaction两种 代码中通过调用DBImpl::MaybeScheduleCompaction
+    </div>
+    <div class="read-more">
+      <a href="/post/2016-09-06-leveldb-compact/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/2016-08-24-mvcc-and-manifest/">leveldb 源码笔记之 MVCC &amp;&amp; Manifest</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2016-08-24 </span>
+      <div class="post-category">
+          <a href="/categories/distribute/"> distribute </a>
+          <a href="/categories/system/"> system </a>
+          <a href="/categories/leveldb/"> leveldb </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      MVCC 问题: 针对同一条记录，如果读和写在同一时间发生时，reader可能会读取到不一致或者写了一半的数据 常见解决方案 悲观锁： 最简单的方式,即通过
+    </div>
+    <div class="read-more">
+      <a href="/post/2016-08-24-mvcc-and-manifest/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/2016-08-22-sstable-summary/">leveldb 源码笔记之 sstable</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2016-08-22 </span>
@@ -160,71 +228,6 @@
     </div>
     <div class="read-more">
       <a href="/post/2016-08-18-leveldb-write/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/2016-07-20-signal-with-mutex-locked-or-not/">Signal with mutex locked or not(译)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-07-20 </span>
-      <div class="post-category">
-          <a href="/categories/concurrency/"> concurrency </a>
-          <a href="/categories/system/"> system </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      原文链接 介绍 当我们使用条件变量的时候，总有这样一个问题：到底该在解锁mutex之前进行sinal/broadcast，还是在之后？ 什么时候进
-    </div>
-    <div class="read-more">
-      <a href="/post/2016-07-20-signal-with-mutex-locked-or-not/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/2016-07-08-google-file-system-summary/">Google File System 笔记</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-07-08 </span>
-      <div class="post-category">
-          <a href="/categories/distribute/"> distribute </a>
-          <a href="/categories/system/"> system </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      创新点 把组件故障当做常态，而不是异常。即，要有完备的监控，错误检测，故障恢复机制 通常文件都是巨大的，数以GB是常态 多数文件的修改是追加新数据
-    </div>
-    <div class="read-more">
-      <a href="/post/2016-07-08-google-file-system-summary/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/2016-06-27-ieee-floating-point-summary/">浮点数问题探究</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-06-27 </span>
-      <div class="post-category">
-          <a href="/categories/system/"> system </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      问题 最近在使用openresty实现一些业务，业务中设计了一套二进制编码，目前为49bit。真正实现的时候发现lua里不支持(u)int64
-    </div>
-    <div class="read-more">
-      <a href="/post/2016-06-27-ieee-floating-point-summary/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

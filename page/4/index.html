@@ -121,6 +121,72 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/2017-06-07-acid/">What is ACID</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2017-06-07 </span>
+      <div class="post-category">
+          <a href="/categories/distribute/"> distribute </a>
+          <a href="/categories/system/"> system </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      What Atomicity 描述： 一个事务包含一系列的操作，这一系列的操作都成功，则意味着事务执行成功；一旦执行过程中发生故障(fault)，数据库需要放弃整个事务
+    </div>
+    <div class="read-more">
+      <a href="/post/2017-06-07-acid/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/2017-06-06-unreliable-network/">Unreliable Network</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2017-06-06 </span>
+      <div class="post-category">
+          <a href="/categories/distribute/"> distribute </a>
+          <a href="/categories/system/"> system </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      Introduce 众所周知TCP是可靠的网络传输协议，但是为什么在分布式系统中又认为网络是不可靠的呢？通常有以下两点： 发送方无法确定接收方已经收到请求 发送方
+    </div>
+    <div class="read-more">
+      <a href="/post/2017-06-06-unreliable-network/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/2017-06-05-timing-and-order/">Timing and Order</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2017-06-05 </span>
+      <div class="post-category">
+          <a href="/categories/distribute/"> distribute </a>
+          <a href="/categories/system/"> system </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      Introduce 分布式环境面临的两个主要的问题就是网络不可靠和时钟不可靠，这里主要总结时钟问题 Physical Clocks 我们日常使用的计算机和服务器的物理时钟都是使用的石英(q
+    </div>
+    <div class="read-more">
+      <a href="/post/2017-06-05-timing-and-order/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/2017-06-05-vector-clock/">Vector clock summary</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2017-06-05 </span>
@@ -159,74 +225,6 @@
     </div>
     <div class="read-more">
       <a href="/post/2017-06-03-time-clocks-and-the-ordering-of-events-in-a-distributed-system/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/2016-09-10-leveldb-read/">leveldb 源码笔记之 Read</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-09-10 </span>
-      <div class="post-category">
-          <a href="/categories/distribute/"> distribute </a>
-          <a href="/categories/system/"> system </a>
-          <a href="/categories/leveldb/"> leveldb </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      key逻辑分类 根据我们之前文章的描述，leveldb的数据存储可能存在在内存的memtable中，或者磁盘的sstalbe中，但是key的实
-    </div>
-    <div class="read-more">
-      <a href="/post/2016-09-10-leveldb-read/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/2016-09-06-leveldb-compact/">leveldb 源码笔记之 Compact</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-09-06 </span>
-      <div class="post-category">
-          <a href="/categories/distribute/"> distribute </a>
-          <a href="/categories/leveldb/"> leveldb </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      简介 leveldb中只有minor compaction 和 major compaction两种 代码中通过调用DBImpl::MaybeScheduleCompaction
-    </div>
-    <div class="read-more">
-      <a href="/post/2016-09-06-leveldb-compact/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/2016-08-24-mvcc-and-manifest/">leveldb 源码笔记之 MVCC &amp;&amp; Manifest</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-08-24 </span>
-      <div class="post-category">
-          <a href="/categories/distribute/"> distribute </a>
-          <a href="/categories/system/"> system </a>
-          <a href="/categories/leveldb/"> leveldb </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      MVCC 问题: 针对同一条记录，如果读和写在同一时间发生时，reader可能会读取到不一致或者写了一半的数据 常见解决方案 悲观锁： 最简单的方式,即通过
-    </div>
-    <div class="read-more">
-      <a href="/post/2016-08-24-mvcc-and-manifest/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Prompt Engineering 是一种什么技术? - 1Feng 的技术文章</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="1Feng" /><meta name="description" content="本文其实是关于 Pre-Train &#43; Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》，这是一篇" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.122.0 with theme even" />
+
+
+<link rel="canonical" href="http://1feng.github.io/post/2023-05-01-prompt-engineering/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Prompt Engineering 是一种什么技术?" />
+<meta property="og:description" content="本文其实是关于 Pre-Train &#43; Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》，这是一篇" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1feng.github.io/post/2023-05-01-prompt-engineering/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-05-01T18:57:45+08:00" />
+<meta property="article:modified_time" content="2023-05-01T18:57:45+08:00" />
+
+<meta itemprop="name" content="Prompt Engineering 是一种什么技术?">
+<meta itemprop="description" content="本文其实是关于 Pre-Train &#43; Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》，这是一篇"><meta itemprop="datePublished" content="2023-05-01T18:57:45+08:00" />
+<meta itemprop="dateModified" content="2023-05-01T18:57:45+08:00" />
+<meta itemprop="wordCount" content="3271">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Prompt Engineering 是一种什么技术?"/>
+<meta name="twitter:description" content="本文其实是关于 Pre-Train &#43; Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》，这是一篇"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">1Feng&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">1Feng&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Prompt Engineering 是一种什么技术?</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-05-01 </span>
+        <div class="post-category">
+            <a href="/categories/ai/"> AI </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#nlp-技术演进">Ⅰ、NLP 技术演进</a></li>
+    <li><a href="#prompt-是什么">Ⅱ、Prompt 是什么？</a>
+      <ul>
+        <li><a href="#q1传统的-nlp-监督学习的形式是什么">Q1：传统的 NLP 监督学习的形式是什么？</a></li>
+        <li><a href="#q2基于-prompt-的形式是什么">Q2：基于 Prompt 的形式是什么？</a></li>
+        <li><a href="#q3prompt-的设计要重点关注些什么">Q3：Prompt 的设计要重点关注些什么？</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>本文其实是关于 Pre-Train + Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 <a href="https://arxiv.org/abs/2107.13586">《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》</a>，这是一篇21年7月的综述型论文，当时GPT系列只进展到GPT-3，所以论文内容没有涵盖 instruct-GPT 相关信息。</p>
+<p>虽然这是一篇综述但是涉及很多理论和方法细节内容，接下来我的总结会忽略掉一些 NLP 相关方法细节，主要关注核心的一些概念和 常见的 Prompt 相关的范式。</p>
+<p>看完这篇文章就能从专业角度理解到底什么是 prompt engineering 了</p>
+<h1 id="nlp-技术演进">Ⅰ、NLP 技术演进</h1>
+<p><img src="/images/blog_images/prompt/01.png" alt=""></p>
+<p>首先作者总结了近几年 NLP 领域技术范式的发展趋势，总体分为了上图 a、b、c、d 四个阶段，其中 2017~19 年 开始出现的 Pre-train + Fine-tune 的方式作者认为是该领域的一次范式革命（a、b 都是基于完全监督学习，但是 Pre-train 已经开始摆脱完全监督）。d 的出现则代表了第二次大的变革的刚刚开始</p>
+<ul>
+<li><strong>a. 非神经网络的 FSL</strong>：主要工作总的关注在特征工程，数据挖掘相关</li>
+<li><strong>b. 基于神经网络的 FSL</strong>：随着深度学习的应用，主要工作重点关注在神经网络的架构设计，例如卷积设计（CNN）、循环设计（RNN）、注意力机制（attentional）</li>
+<li><strong>c. Pre-train, Fine-tune</strong>：重点关注在目标函数设计（个人理解，这个阶段的微调更多会对预训练模型的参数进行调整，来让整个模型的目标更适配下游任务）</li>
+<li><strong>d. Pre-train, Prompt, Predict</strong>：这个阶段重点关注在 Prompt 的设计上，是否进行 fine-tune 并不是重点。Prompt 实现了让下游的 NLP 任务可以适配语言模型（基础模型的参数是冻结的）</li>
+</ul>
+<h1 id="prompt-是什么">Ⅱ、Prompt 是什么？</h1>
+<p>我们以问题的形式对核心的一些概念进行总结</p>
+<h2 id="q1传统的-nlp-监督学习的形式是什么">Q1：传统的 NLP 监督学习的形式是什么？</h2>
+<p>数学描述：</p>
+<ul>
+<li>输入：<strong>x</strong>, 通常是文本</li>
+<li>输出：<strong>y</strong>, 可以是识别的情感分类也可以是翻译文本等</li>
+<li>模型：<strong>P(y|x;θ)</strong>, 本质是基于输入 x 来预测 y 的概率模型，θ 是训练学习到的参数</li>
+</ul>
+<p>示例：以翻译任务为例 x = &ldquo;Hyv ̈a ̈a huomenta.&rdquo; （芬兰语） y = &ldquo;Good morning&rdquo; （英语）</p>
+<h2 id="q2基于-prompt-的形式是什么">Q2：基于 Prompt 的形式是什么？</h2>
+<p>针对从输入x 获取期望的输出 y 这个问题，我们基于 prompt 来做的流程是：</p>
+<ul>
+<li>Step 1，添加 Prompt</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- 数学描述：
+</span></span><span class="line"><span class="cl">    - 定义一个 Prompt 函数  fprompt(·)，相当于一个模板
+</span></span><span class="line"><span class="cl">    - 令  x′ = fprompt(x)，相当于用x填充模板
+</span></span><span class="line"><span class="cl">- 示例：以情感分析为例
+</span></span><span class="line"><span class="cl">    - 输入 x = &#34;我喜欢这部电影。&#34;
+</span></span><span class="line"><span class="cl">    - Prompt 函数 = “ [X] 总体而言，这是一部 [Z] 电影”
+</span></span><span class="line"><span class="cl">    - 所以 x′ = “我喜欢这部电影。总体而言，这是一部 [Z] 电影”
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Step 2：答案设计和搜索</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- 数学描述：
+</span></span><span class="line"><span class="cl">    - 定义一个 fill 函数(ffill)来填充 x′ 中的 [z]，ffill(x′, z)，这里的 z 是存在多种可能
+</span></span><span class="line"><span class="cl">    - 把上述多种可能带入预训练的模型 P(ffill(x′, z);θ) 计算概率
+</span></span><span class="line"><span class="cl">    - 从上述结果中搜索最佳答案(公式如图)  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/blog_images/prompt/02.png" alt=""></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- 示例：
+</span></span><span class="line"><span class="cl">    - 如 ffill(x′, z) = 我喜欢这部电影。总体而言，这是一部差电影
+</span></span><span class="line"><span class="cl">    - 如 ffill(x′, z) = 我喜欢这部电影。总体而言，这是一部好电影
+</span></span><span class="line"><span class="cl">    - 如 ffill(x′, z) = 我喜欢这部电影。总体而言，这是一部感人的电影
+</span></span><span class="line"><span class="cl">    - 搜索到的最佳答案可能是 z = 好
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Step 3：答案映射</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- 搜索到的最佳答案 z 并不一定是想要的 y，例如 y 可能要求的输出是[牛逼、一般、不牛逼]，所以还要进行一个映射
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>论文中给的完整示例如图：
+<img src="/images/blog_images/prompt/03.png" alt=""></p>
+<h2 id="q3prompt-的设计要重点关注些什么">Q3：Prompt 的设计要重点关注些什么？</h2>
+<p>这里我们主要关注并回答五个问题：</p>
+<ol>
+<li>如何设计 <strong>P(,;θ)</strong> ？</li>
+<li>如何设计 <strong>fprompt(·)</strong> ？</li>
+<li>如何设计 <strong>z</strong> ？</li>
+<li>如何以复合的方式来设计 <strong>fprompt(·)</strong> ？</li>
+<li>Prompt 对 fine-tune 策略的影响？</li>
+</ol>
+<p><strong>Pre-train model Choice &ndash; 如何设计 P(,;θ)</strong></p>
+<p>预训练模型有很多类型，主要区别在于目标函数是什么，有的是从左到右的预测（GPT系列），有基于掩码的预测（BERT），不同的目标函数对下游任务有不同的效果，因此对 Prompt 的设计会有不同的要求（个人理解：做 Prompt 设计一定要知道 Pre-train model 的目标函数是什么，设计Prompt 时尽量去适配这个目标才能获得最好好的提示效果）</p>
+<p><strong>1. Prompt Engineering &ndash; 如何设计 fprompt(·)</strong></p>
+<ul>
+<li>Prompt 类型：根据 Pre-train 模型的目标函数来选择 Prompt 类型，例如GPT系列是从左到右的预测，所以对它们做 Prompt 设计要使用 prefix prompts（前缀式） 的方案。像 BERT 则是使用 cloze prompts(完形填空式的)</li>
+<li>人工设计 vs 自动化设计
+<ul>
+<li>人工设计：论文中给出了一些业内案例（如LAMA），未做详细描述</li>
+<li>自动学习：作者把自动学习分成了两类，一是 Discrete Prompts（离散的），一个是 Continuous Prompts（连续的）。简单理解的话，前者是人能看懂的 Prompt，后者是人看不懂但是模型能懂的（例如 embedding）。 个人理解所谓自动学习本质是把设计 Prompt 这个过程重新转换为了一个传统 NLP 特征工程数据挖掘的问题来解决。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Answer Engineering &ndash; 如何设计 z</strong></p>
+<ul>
+<li>Answer 粒度：tokens 和 span 适用于分类、关系提取、命名实体识别等下游任务。Sentence 适用于语言生成（如翻译和摘要）
+<ul>
+<li>tokens: Pre-train 模型的字典词袋（简言之就是 pre-train 的训练数据中出现过的所有token集合）中的一个 token 或者 一个 token 子集</li>
+<li>span：短的 multi-token 片段。这些提示通常与完形填空提示（cloze prompts）一起使用</li>
+<li>sentence：一个句子或文件。这些通常与前缀提示（prefix prompts）一起使用</li>
+<li>人工设计 vs 自动学习：基本思想同 Prompt Engineering</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. 多提示（Multi-Prompt）学习 &ndash; 如何以复合的方式来设计 fprompt(·)</strong>
+业内的大量实践证明多提示(Multi-Prompt)的实践效果显著，所以作者对 Multi-Prompt 技术进行了系统性分类和介绍， 总共分为以下五类方案</p>
+<ul>
+<li>
+<p>整合（Prompt Ensembling）：</p>
+<ul>
+<li>图例：<img src="/images/blog_images/prompt/04.png" alt=""></li>
+<li>说明：使用多个 Prompt（例如有互补能力），然后使用策略对结果进行选择（如加权平均、投票等）</li>
+</ul>
+</li>
+<li>
+<p>增强（Prompt Augmentation）：</p>
+<ul>
+<li>图例：<img src="/images/blog_images/prompt/05.png" alt=""></li>
+<li>说明：其实就是通过 answer-prompt 进行示范学习</li>
+</ul>
+</li>
+<li>
+<p>组合（Prompt Composition）：</p>
+<ul>
+<li>图例：<img src="/images/blog_images/prompt/06.png" alt=""></li>
+<li>说明：示例是一个关系提取的任务，通过设计多个 sub-prompt, 每个sub-prompt 对应一个子任务，例如先识别命名实体，再识别关系，最后定义一个组合 Prompt</li>
+</ul>
+</li>
+<li>
+<p>分解（Prompt Decomposition）：</p>
+<ul>
+<li>图例：<img src="/images/blog_images/prompt/07.png" alt=""></li>
+<li>说明：组合的反向方式，例如文本中要识别的命名实体太多时，设计一个Prompt可能效果会不好，不如拆成多个 Sub-Prompt</li>
+</ul>
+</li>
+<li>
+<p>共享（Prompt Sharing）：</p>
+<ul>
+<li>图例：<img src="/images/blog_images/prompt/08.png" alt=""></li>
+<li>说明：如图的案例是通过一个共享的模板，实现在多个不同领域多个不同任务上来进行 Prompt。该领域实践较少，案例有限</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. 基于 Prompt 的训练策略 &ndash; Prompt 对 fine-tune 策略的影响？</strong></p>
+<p>Prompt 的方式出现之后，针对 Pre-train model 的再训练，主要可以分为以下几种常见策略</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">常见策略</th>
+<th style="text-align:center">Pre-train model 的参数策略</th>
+<th style="text-align:center">是否使用 prompt</th>
+<th style="text-align:center">prompt有无引入额外参数</th>
+<th style="text-align:center">prompt 额外的参数是否被 tuned</th>
+<th style="text-align:center">优势</th>
+<th style="text-align:center">不足</th>
+<th style="text-align:center">案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Promptless Fine-tuning</td>
+<td style="text-align:center">Tuned</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">简单，无需设计Prompt</td>
+<td style="text-align:center">可能会过拟合，在小数据集上学习不稳定。有可能发生灾难性遗忘（即，丢失掉Pre-Train 得到的一些能力）</td>
+<td style="text-align:center">ELMo、BERT、BART</td>
+</tr>
+<tr>
+<td style="text-align:center">Tuning-free Prompting</td>
+<td style="text-align:center">Frozen</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">效率高，无需Pre-Train model 的参数更新过程。因为LM参数保持不变，不会发生灾难性遗忘</td>
+<td style="text-align:center">需要大量的Prompt 工程设计才能实现高精度。上下文较多时会很慢</td>
+<td style="text-align:center">GPT-3、AutoPrompt、LAMA</td>
+</tr>
+<tr>
+<td style="text-align:center">Fixed-LM Prompt Tuning</td>
+<td style="text-align:center">Frozen</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">效率高，无需Pre-Train model 的参数更新过程。因为LM参数保持不变，不会发生灾难性遗忘</td>
+<td style="text-align:center">不适用于 zero-shot 场景（作者没解释为什么）</td>
+<td style="text-align:center">Prefix-Tuning、Prompt-Tuning</td>
+</tr>
+<tr>
+<td style="text-align:center">Fixed-prompt LM Tuning</td>
+<td style="text-align:center">Tuned</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">对特定下游任务的适配性更强</td>
+<td style="text-align:center">只适配制定的下游任务，对其他类型任务无效。有可能发生灾难性遗忘</td>
+<td style="text-align:center">PET-TC、PET-GEN、LM-BFF</td>
+</tr>
+<tr>
+<td style="text-align:center">Prompt+LM Tuning</td>
+<td style="text-align:center">Tuned</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">最具表现力的方法，可能适用于高数据设置。（原文：This is the most expressive method, likely suitable for high-data settings）</td>
+<td style="text-align:center">需要训练存储所有参数。容易对小数据集形成过拟合。有可能发生灾难性遗忘</td>
+<td style="text-align:center">PADA、P-Tunning、PTR</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>个人理解：
+<ul>
+<li>对 Pre-train model 参数的更新，从实践来看很多时候得不偿失，训练成本高+有灾难性遗忘的可能</li>
+<li>Pre-train + Prompt 做进一步 tuning 没有标准的范式，大家都在尝试各种可能。例如是否更新 Pre-train model 的参数以及更新多少并没有明确界限。亦或者除了 Prompt 会引入额外参数，fine-tune 是否还有其他额外参数（个人理解 instruct-GPT 阶段3的PPO也算是引入了额外参数的, 另外 LoRa 的方式也引入了额外参数）</li>
+</ul>
+</li>
+</ul>
+<p>最后附上一张论文中对问题3（Q3）的思维导图:
+<img src="/images/blog_images/prompt/09.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">1Feng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-05-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/2023-05-01-sam-and-visual-prompting/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">SAM 和 Visual Prompting 对 Data-Centric AI 的启示</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2023-05-01-data-centric-ai/">
+            <span class="next-text nav-default">后 ChatGPT 时代 Data-Centric AI 的最新思想和方法框架</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:erenno1.jiang@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/1Feng" class="iconfont icon-github" title="github"></a>
+      <a href="https://book.douban.com/people/Erenno1/collect" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://1feng.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+     备案 - 
+    <a class="theme-link" href="https://beian.miit.gov.cn/#/Integrated/index">鲁ICP备16029016号-1</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>1Feng</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

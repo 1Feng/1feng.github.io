@@ -10,10 +10,31 @@
     <atom:link href="http://1feng.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>组织管理中流程规则的利弊</title>
-      <link>http://1feng.github.io/post/process-and-rule/</link>
+      <link>http://1feng.github.io/post/2034-02-02-process-and-rule/</link>
       <pubDate>Fri, 02 Feb 2024 11:47:02 +0800</pubDate>
-      <guid>http://1feng.github.io/post/process-and-rule/</guid>
+      <guid>http://1feng.github.io/post/2034-02-02-process-and-rule/</guid>
       <description>字节的观点 最近读到腾讯深网关于字节的一篇报道，里面提到到了字节高层对组织管理流程规则的看法，整体偏负向。 张一鸣早在2016年就公开表达过自己</description>
+    </item>
+    <item>
+      <title>SAM 和 Visual Prompting 对 Data-Centric AI 的启示</title>
+      <link>http://1feng.github.io/post/2023-05-01-sam-and-visual-prompting/</link>
+      <pubDate>Sat, 20 May 2023 20:12:08 +0800</pubDate>
+      <guid>http://1feng.github.io/post/2023-05-01-sam-and-visual-prompting/</guid>
+      <description>整个 23 年上半年，NLP 领域的变化可谓如火如荼，那 CV 方向尤其涉及模型开发的工程架构领域发生了哪些变化？因此有了下面两个简单的调研： Ⅰ、Segm</description>
+    </item>
+    <item>
+      <title>Prompt Engineering 是一种什么技术?</title>
+      <link>http://1feng.github.io/post/2023-05-01-prompt-engineering/</link>
+      <pubDate>Mon, 01 May 2023 18:57:45 +0800</pubDate>
+      <guid>http://1feng.github.io/post/2023-05-01-prompt-engineering/</guid>
+      <description>本文其实是关于 Pre-Train + Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》，这是一篇</description>
+    </item>
+    <item>
+      <title>后 ChatGPT 时代 Data-Centric AI 的最新思想和方法框架</title>
+      <link>http://1feng.github.io/post/2023-05-01-data-centric-ai/</link>
+      <pubDate>Mon, 01 May 2023 18:50:45 +0800</pubDate>
+      <guid>http://1feng.github.io/post/2023-05-01-data-centric-ai/</guid>
+      <description>本文内容主要总结自 23 年 3 月份的一篇论文 《Data-centric Artificial Intelligence: A Survey》。作者从必要性、目标、一般方法对 Data-centric 的思想进行了框架性的综</description>
     </item>
     <item>
       <title>《Machine Learning Operations (MLOps): Overview, Definition, and Architecture》 summary</title>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI on 1Feng 的技术文章</title>
+    <link>http://1feng.github.io/categories/ai/</link>
+    <description>Recent content in AI on 1Feng 的技术文章</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 20 May 2023 20:12:08 +0800</lastBuildDate>
+    <atom:link href="http://1feng.github.io/categories/ai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SAM 和 Visual Prompting 对 Data-Centric AI 的启示</title>
+      <link>http://1feng.github.io/post/2023-05-01-sam-and-visual-prompting/</link>
+      <pubDate>Sat, 20 May 2023 20:12:08 +0800</pubDate>
+      <guid>http://1feng.github.io/post/2023-05-01-sam-and-visual-prompting/</guid>
+      <description>整个 23 年上半年，NLP 领域的变化可谓如火如荼，那 CV 方向尤其涉及模型开发的工程架构领域发生了哪些变化？因此有了下面两个简单的调研： Ⅰ、Segm</description>
+    </item>
+    <item>
+      <title>Prompt Engineering 是一种什么技术?</title>
+      <link>http://1feng.github.io/post/2023-05-01-prompt-engineering/</link>
+      <pubDate>Mon, 01 May 2023 18:57:45 +0800</pubDate>
+      <guid>http://1feng.github.io/post/2023-05-01-prompt-engineering/</guid>
+      <description>本文其实是关于 Pre-Train + Prompt 在 NLP 领域的实践综述，这里的信息全部来自论文 《Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing》，这是一篇</description>
+    </item>
+    <item>
+      <title>后 ChatGPT 时代 Data-Centric AI 的最新思想和方法框架</title>
+      <link>http://1feng.github.io/post/2023-05-01-data-centric-ai/</link>
+      <pubDate>Mon, 01 May 2023 18:50:45 +0800</pubDate>
+      <guid>http://1feng.github.io/post/2023-05-01-data-centric-ai/</guid>
+      <description>本文内容主要总结自 23 年 3 月份的一篇论文 《Data-centric Artificial Intelligence: A Survey》。作者从必要性、目标、一般方法对 Data-centric 的思想进行了框架性的综</description>
+    </item>
+  </channel>
+</rss>
